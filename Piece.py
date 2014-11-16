@@ -26,6 +26,9 @@ class Piece:
         """
         if (square.addPiece(self)):
             self.__square = square
+            return (True)
+        else:
+            return (False)
 
     def getPosition(self):
         return(self.__square)

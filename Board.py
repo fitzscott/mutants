@@ -34,6 +34,10 @@ class Board():
 
     def getSquare(self, xpos, ypos):
         assert((self.__height != 0) and (self.__width != 0))
+        if ((xpos >= self.__width) or (ypos >= self.__height)):
+            return None
+        if ((xpos < 0) or (ypos < 0)):
+            return None
         return(self.__squares[xpos + ypos * self.__width])
 
     def fill(self):

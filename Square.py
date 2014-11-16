@@ -1,6 +1,7 @@
 __author__ = 'Fitz'
 import mutants.Piece
 import mutants.Board
+import mutants.Constants
 
 class Square():
     """
@@ -20,6 +21,9 @@ class Square():
         self.__xpos = xpos
         self.__ypos = ypos
 
+    def isOccupied(self):
+        return (self.__piece != None)
+
     def addPiece(self, piece):
         """
         For the time being, we will allow only one piece per square.  That will change
@@ -27,17 +31,29 @@ class Square():
         :param piece:
         :return: Boolean
         """
-        if (self.__piece == None):
+        if (not self.isOccupied()):
             self.__piece = piece
             return(True)
         else:       # Can't move into an occupied square (for now)
             return(False)
+
+    def removePiece(self):
+        self.__piece = None
+
+    def getNeighbor(self, direction):
+        neighX = self.__xpos + direction[0]
+        neighY = self.__ypos + direction[1]
+        neighbor = self.__board.getSquare(neighX, neighY)
+        return(neighbor)
 
     def getXpos(self):
         return(self.__xpos)
 
     def getYpos(self):
         return(self.__ypos)
+
+    def getPosStr(self):
+        return("(" + str(self.__xpos) + ", " + str(self.__ypos) + ")")
 
 if __name__ == "__main__":
     import doctest
