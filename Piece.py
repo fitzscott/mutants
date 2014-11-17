@@ -5,10 +5,11 @@ class Piece:
     """
     Represents a piece / counter / chit on the board.
     >>> p = Piece("Bob", None)
-    >>> print(p.getName())
+    >>> print(p.name)
     Bob
     >>> sq = mutants.Square.Square(None)
     >>> p.setPosition(sq)
+    True
     """
 
     def __init__(self, name, image):
@@ -16,8 +17,12 @@ class Piece:
         self.__image = image
         self.__square = None
 
-    def getName(self):
+    @property
+    def name(self):
         return(self.__name)
+
+    def getPosition(self):
+        return(self.__square)
 
     def setPosition(self, square):
         """
@@ -29,9 +34,6 @@ class Piece:
             return (True)
         else:
             return (False)
-
-    def getPosition(self):
-        return(self.__square)
 
 if __name__ == "__main__":
     import doctest

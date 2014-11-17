@@ -6,16 +6,19 @@ class Board():
     """
     Represents the game board.
     >>> b = Board()
-    >>> b.setWidth(10)
+    >>> b.width = 10
     >>> b.fill()
     Must assign width and height before filling the board.
     False
-    >>> b.setHeight(5)
+    >>> b.height = 5
     >>> b.fill()
     True
     >>> sq = b.getSquare(3, 4)
     >>> print("Square's X = " + str(sq.getXpos()) + " and Y = " + str(sq.getYpos()))
     Square's X = 3 and Y = 4
+    >>> sq = b.getSquare(9, 4)
+    >>> print("Square's X = " + str(sq.getXpos()) + " and Y = " + str(sq.getYpos()))
+    Square's X = 9 and Y = 4
     """
 
     def __init__(self):
@@ -23,14 +26,30 @@ class Board():
         self.__width = 0
         self.__height = 0
 
-    def setWidth(self, width):
+    @property
+    def width(self):
+        return(self.__width)
+
+    @width.setter
+    def width(self, width):
         self.__width = width
 
-    def setHeight(self, height):
+    @property
+    def height(self):
+        return (self.__height)
+
+    @height.setter
+    def height(self, height):
         self.__height = height
 
+    # I think these need to be redefined as properties, but I'm not sure how yet.
     def addSquare(self, xpos, ypos):
-        self.__squares.append(mutants.Square.Square(self, xpos, ypos))
+        sq = mutants.Square.Square(self, xpos, ypos)
+        self.__squares.append(sq)
+        return (sq)
+
+    def getSquareIndex(self, xpos, ypos):
+        return(xpos + ypos * self.__width)
 
     def getSquare(self, xpos, ypos):
         assert((self.__height != 0) and (self.__width != 0))
@@ -38,7 +57,7 @@ class Board():
             return None
         if ((xpos < 0) or (ypos < 0)):
             return None
-        return(self.__squares[xpos + ypos * self.__width])
+        return(self.__squares[self.getSquareIndex(xpos, ypos)])
 
     def fill(self):
         if ((self.__width == 0) or (self.__height == 0)):
@@ -54,6 +73,4 @@ class Board():
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-
 

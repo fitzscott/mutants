@@ -6,8 +6,8 @@ import mutants.Constants
 class TestMovingPiece(unittest.TestCase):
     def setUp(self):
         self.__board = mutants.Board.Board()
-        self.__board.setWidth(10)
-        self.__board.setHeight(5)
+        self.__board.width = 10
+        self.__board.height = 5
         self.__board.fill()
 
     def tearDown(self):
@@ -31,11 +31,17 @@ class TestMovingPiece(unittest.TestCase):
         self.assertEqual(mp.getPosition().getXpos(), 8)
         self.assertEqual(mp.getPosition().getYpos(), 2)
         self.assertEqual(mp.getRemainingMovement(), 2)
+        self.assertFalse(sq.isOccupied())
         mp.move(mutants.Constants.Constants.UP)
         self.assertEqual(mp.getPosition().getXpos(), 8)
         self.assertEqual(mp.getPosition().getYpos(), 1)
         self.assertEqual(mp.getRemainingMovement(), 1)
         mp.resetMovement()
         self.assertEqual(mp.getRemainingMovement(), 3)
+        self.assertTrue(mp.move(mutants.Constants.Constants.DOWN))
+        self.assertTrue(mp.move(mutants.Constants.Constants.DOWN))
+        self.assertTrue(mp.move(mutants.Constants.Constants.DOWN))
+        self.assertEqual(mp.getRemainingMovement(), 0)
+        self.assertFalse(mp.move(mutants.Constants.Constants.LEFT))
 
 

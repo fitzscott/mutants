@@ -4,9 +4,10 @@ import mutants.Constants
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
+        super().setUp()
         self.__board = mutants.Board.Board()
-        self.__board.setWidth(10)
-        self.__board.setHeight(5)
+        self.__board.width = 10
+        self.__board.height = 5
         self.__board.fill()
 
     def tearDown(self):
