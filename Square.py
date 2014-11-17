@@ -23,6 +23,7 @@ class Square():
         self.__xpos = xpos
         self.__ypos = ypos
         self.__terrain = mutants.Space.Space()
+        self.__equipment = None
 
     def isOccupied(self):
         return (self.__piece != None)
@@ -70,6 +71,23 @@ class Square():
 
     def getPosStr(self):
         return("(" + str(self.__xpos) + ", " + str(self.__ypos) + ")")
+
+    def addequipment(self, tool):
+        """
+        We're just going to overwrite any equipment in the square.  Don't drop
+        stuff into squares with stuff you still want.
+        :param tool:
+        :return:
+        """
+        self.__equipment = tool
+
+    def getequipment(self):
+        return (self.__equipment)
+
+    def takeequipment(self):
+        tool = self.__equipment
+        self.__equipment = None
+        return (tool)
 
 if __name__ == "__main__":
     import doctest

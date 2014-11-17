@@ -67,7 +67,13 @@ class BoardFile():
         for linenum in range(len(self.__boardlines)):
             for colnum in range(len(self.__boardlines[linenum]) - 1):  #  skip CRLF
                 sq = board.addSquare(colnum, linenum)
-                terr = fc.getTerrain(self.__boardlines[linenum][colnum])
+                equip = fc.getEquipment(self.__boardlines[linenum][colnum])
+                if (equip == None):
+                    terr = fc.getTerrain(self.__boardlines[linenum][colnum])
+                else:
+                    # equipment can only reside in clear terrain
+                    terr = fc.getTerrain(" ")
+                    sq.addequipment(equip)
                 sq.setTerrain(terr)
         return(board)
 

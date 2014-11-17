@@ -21,6 +21,14 @@ class Terrain():
     def name(self, name):
         self.__name = name
 
+    @property
+    def image(self):
+        return(self.__image)
+
+    @image.setter
+    def image(self, image):
+        self.__image = image
+
     def getmovethru(self):
         return(self.__moveThru)
 

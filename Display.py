@@ -38,6 +38,17 @@ class Display():
         self.loadImage(cwd, "Door")
         self.loadImage(cwd, "Space")
         self.loadImage(cwd, "Wall")
+        self.loadImage(cwd, "ExteriorSpace")
+        self.loadImage(cwd, "SmashedDoor")
+        self.loadImage(cwd, "Axe")
+        self.loadImage(cwd, "Bat")
+        self.loadImage(cwd, "Extinguisher")
+        self.loadImage(cwd, "FirstAid")
+        self.loadImage(cwd, "Pipe")
+        self.loadImage(cwd, "Pistol")
+        self.loadImage(cwd, "Rifle")
+        self.loadImage(cwd, "Shotgun")
+        self.loadImage(cwd, "SpareParts")
         self.loadBoard(boardname)
 
     def runLoop(self):
@@ -51,7 +62,11 @@ class Display():
             for row in range(self.__board.height):
                 for col in range(self.__board.width):
                     #print("Row is " + str(row) + ", col is " + str(col))
-                    imgnm = self.__board.getSquare(col, row).getTerrain().name
+                    equip = self.__board.getSquare(col, row).getequipment()
+                    if (equip == None):
+                        imgnm = self.__board.getSquare(col, row).getTerrain().name
+                    else:
+                        imgnm = equip.name
                     img = self.__images[imgnm]
                     self.__screen.blit(img, (col * mutants.Constants.Constants.IMAGESIDESIZE,
                                              row * mutants.Constants.Constants.IMAGESIDESIZE))

@@ -18,13 +18,24 @@ class Door(mutants.Terrain.Terrain):
 
     def __init__(self):
         super().__init__("Door", "Door")
+        self.__smashed = False
 
     def movethru(self, piece):
+        if (self.__smashed):
+            return (True)
         if (isinstance(piece, mutants.MovingPiece.MovingPiece)):
             piece.decrRemaining(1)
             return (True)
         else:
             return(False)
+
+    def smash(self):
+        """
+        For now, we'll have smashing be automatic.  I think we'll only want it to be a
+        2 in 3 for mutants in the game, though.
+        :return:
+        """
+        self.__smashed = True
 
 if __name__ == "__main__":
     import doctest

@@ -1,4 +1,4 @@
-mo__author__ = 'Fitz'
+__author__ = 'Fitz'
 
 from mutants.Piece import Piece
 import mutants.Constants
@@ -9,11 +9,20 @@ class MovingPiece(Piece):
     >>> mp = MovingPiece("Ozzie", None)
     >>> mp.name
     'Ozzie'
+    >>> mp.handtohand = 4
+    >>> mp.handtohand
+    4
+    >>> if not mp.damage(1): print(mp.name + " is dead.  Aww....")
+    Ozzie is dead.  Aww....
     """
-    def __init__(self, name, image, movePts = 0):
+    def __init__(self, name, image, movePts = 0, hitPts = 1):
         super().__init__(name, image)
         self.__movePts = movePts
         self.__moveRemaining = self.__movePts
+        self.__hitPts = hitPts
+        self.__handtohand = 0
+        self.__ranged = 0
+        self.__carried = None
 
     def resetMovement(self):
         self.__moveRemaining = self.__movePts
@@ -25,7 +34,7 @@ class MovingPiece(Piece):
         self.__moveRemaining -= howmany
 
     def move(self, direction):
-        if (not self.__moveRemaining):
+        if (self.__moveRemaining <= 0):
             print(self.name + " has no remaining movement points.")
             return (False)
 
@@ -42,6 +51,26 @@ class MovingPiece(Piece):
             print("Piece " + self.name + " cannot move off the board.")
 
         return (False)
+
+    def damage(self, amount):
+        self.__hitPts -= amount
+        return(self.__hitPts > 0)
+
+    def heal(self, amount):
+        self.__hitPts += amount
+
+    @property
+    def handtohand(self):
+        if (self.__carried != None):
+            totalh2h = self.__handtohand + 0    # fix this later
+        return (self.__handtohand)
+
+    @handtohand.setter
+    def handtohand(self, h2h):
+        self.__handtohand = h2h
+
+    def pickup(self, tool):
+        self.__carried = tool
 
 if __name__ == "__main__":
     import doctest

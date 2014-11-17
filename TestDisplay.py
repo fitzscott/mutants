@@ -14,6 +14,9 @@ class TestDisplay(unittest.TestCase):
     #def testRealEventLoop(self):
     #    self.__display.runLoop()
 
-    def testBoard2(self):
-        self.__display.loadResources("testboard2")
+    def parmBoard(self, boardname):
+        self.__display.loadResources(boardname)
         self.__display.runLoop()
+
+    def testBoard(self):
+        self.parmBoard("testboard5")

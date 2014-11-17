@@ -27,4 +27,16 @@ class TestBoardFile(unittest.TestCase):
         self.assertNotEqual(b.getSquare(29, 5).getTerrain().name, "Space")
         self.assertNotEqual(b.getSquare(0, 8).getTerrain().name, "Space")
 
+    def testAnotherBoard(self):
+        self.__bf.readFromFile("testboard3")
+        b = self.__bf.createBoard()
+
+    def testYetAnotherBoard(self):
+        self.__bf.readFromFile("testboard4")
+        b = self.__bf.createBoard()
+
+    def testAgainAnotherBoard(self):
+        self.__bf.readFromFile("testboard5")
+        b = self.__bf.createBoard()
+
 
