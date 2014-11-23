@@ -40,10 +40,12 @@ class Square():
         :return: Boolean
         """
         if (not self.__terrain.movethru(piece)):
-            print("Cannot move " + piece.getName() + " through " + self.__terrain.name)
+            #print("Cannot move " + piece.name + " through " + self.__terrain.name)
             return (False)
         if (not self.isOccupied()):
             self.__piece = piece
+            if self.hasequipment():
+                piece.pickup(self.takeequipment())
             return(True)
         else:       # Can't move into an occupied square (for now)
             return(False)
@@ -57,9 +59,10 @@ class Square():
     def setTerrain(self, terrain):
         self.__terrain = terrain
 
-    def getNeighbor(self, direction):
-        neighX = self.__xpos + direction[0]
-        neighY = self.__ypos + direction[1]
+    def getNeighbor(self, direction, distance=1):
+        #print("            Getting neighbor from square, distance " + str(distance))
+        neighX = self.__xpos + direction[0] * distance
+        neighY = self.__ypos + direction[1] * distance
         neighbor = self.__board.getSquare(neighX, neighY)
         return(neighbor)
 
@@ -88,6 +91,20 @@ class Square():
         tool = self.__equipment
         self.__equipment = None
         return (tool)
+
+    def hasequipment(self):
+        return(self.__equipment != None)
+
+    @property
+    def showing(self):
+        whatsShowing = None
+        if self.isOccupied():
+            whatsShowing = self.piece
+        elif self.hasequipment():
+            whatsShowing = self.__equipment
+        else:
+            whatsShowing = self.__terrain
+        return (whatsShowing)
 
 if __name__ == "__main__":
     import doctest

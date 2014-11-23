@@ -5,6 +5,7 @@ import mutants.Wall
 import mutants.Door
 import mutants.ExteriorSpace
 import mutants.Equipment
+import mutants.Mutant
 
 class FileChar():
     """
@@ -71,6 +72,12 @@ class FileChar():
         else:
             equip = mutants.Equipment.Equipment(nm, nm, hth, rnga, rng, heal)
         return(equip)
+
+    def getMutant(self, boardchar):
+        m = None
+        if boardchar == "M":
+            m = mutants.Mutant.Mutant()
+        return (m)
 
 if __name__ == "__main__":
     import doctest

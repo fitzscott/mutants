@@ -11,3 +11,10 @@ class Constants:
 
     IMAGESIDESIZE = 20
 
+    MUTANTSPERWAVE = [60, 80, 100]
+    MAXMUTANTEYESIGHT = 10
+    MAXMUTANTSQUAREMEM = 30
+
+    GAMEBOARD = "testboard5"
+
+

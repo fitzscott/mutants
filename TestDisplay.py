@@ -19,4 +19,4 @@ class TestDisplay(unittest.TestCase):
         self.__display.runLoop()
 
     def testBoard(self):
-        self.parmBoard("testboard5")
+        self.parmBoard("testboard6")

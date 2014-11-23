@@ -35,6 +35,13 @@ class Piece:
         else:
             return (False)
 
+    @property
+    def square(self):
+        #print("Returning square for " + self.name)
+        if self.__square == None:
+            print("Square is None, though (?)")
+        return(self.__square)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

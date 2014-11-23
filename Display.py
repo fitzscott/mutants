@@ -5,6 +5,7 @@ import pygame, sys
 from pygame.locals import *
 import mutants.Constants
 import mutants.BoardFile
+import mutants.Game
 
 class Display():
     """
@@ -14,13 +15,14 @@ class Display():
     >>> d.loadResources("testboard1")
     """
 
-    def __init__(self):
+    def __init__(self, game):
         self.__screen = pygame.display.set_mode(mutants.Constants.Constants.WINSIZE, pygame.DOUBLEBUF)
         pygame.display.set_caption("Attack of the Mutants")
         self.__clock = pygame.time.Clock()
-        pygame.mouse.set_visible(0)
+        #pygame.mouse.set_visible(0)
         self.__images = {}
         self.__board = None
+        self.__game = game
 
     def loadBoard(self, flnm):
         bf = mutants.BoardFile.BoardFile()
@@ -49,10 +51,20 @@ class Display():
         self.loadImage(cwd, "Rifle")
         self.loadImage(cwd, "Shotgun")
         self.loadImage(cwd, "SpareParts")
+        self.loadImage(cwd, "Molly")
+        self.loadImage(cwd, "Bart")
+        self.loadImage(cwd, "Charlie")
+        self.loadImage(cwd, "Robot")
+        self.loadImage(cwd, "Mutant")
         self.loadBoard(boardname)
 
-    def runLoop(self):
-        while (1):
+    @property
+    def board(self):
+        return(self.__board)
+
+    def runLoop(self, maxtix=10000000):
+        i = 0
+        while (i < maxtix):
             self.__clock.tick(40)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -62,15 +74,14 @@ class Display():
             for row in range(self.__board.height):
                 for col in range(self.__board.width):
                     #print("Row is " + str(row) + ", col is " + str(col))
-                    equip = self.__board.getSquare(col, row).getequipment()
-                    if (equip == None):
-                        imgnm = self.__board.getSquare(col, row).getTerrain().name
-                    else:
-                        imgnm = equip.name
-                    img = self.__images[imgnm]
+                    toshow = self.__board.getSquare(col, row).showing
+                    img = self.__images[toshow.name]
                     self.__screen.blit(img, (col * mutants.Constants.Constants.IMAGESIDESIZE,
                                              row * mutants.Constants.Constants.IMAGESIDESIZE))
             pygame.display.update()
+            if i % 40 == 39:
+                self.__game.movemutants()
+            i += 1
 
     def runLoopTest(self):
        img1 = pygame.image.load(r"C:\Users\Fitz\Pictures\mut1.png")

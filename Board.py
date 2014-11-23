@@ -70,6 +70,31 @@ class Board():
 
         return(True)
 
+    def emptyexterior(self):
+        extsq = []
+        for i in range(self.height):
+            for j in range(self.width):
+                sq = self.getSquare(j, i)
+                if sq.getTerrain().name == "ExteriorSpace":
+                    extsq.append(sq)
+        return(extsq)
+
+    def residentmutants(self):
+        muties = []
+        for i in range(self.height):
+            for j in range(self.width):
+                sq = self.getSquare(j, i)
+                if sq.isOccupied() and sq.piece.name == "Mutant":
+                    muties.append(sq.piece)
+        return(muties)
+
+    def clearmutants(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                sq = self.getSquare(j, i)
+                if sq.isOccupied() and sq.piece.name == "Mutant":
+                    sq.removePiece()
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

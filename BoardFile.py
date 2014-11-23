@@ -68,18 +68,21 @@ class BoardFile():
             for colnum in range(len(self.__boardlines[linenum]) - 1):  #  skip CRLF
                 sq = board.addSquare(colnum, linenum)
                 equip = fc.getEquipment(self.__boardlines[linenum][colnum])
-                if (equip == None):
-                    terr = fc.getTerrain(self.__boardlines[linenum][colnum])
-                else:
+                mutie = fc.getMutant(self.__boardlines[linenum][colnum])
+                if (equip != None):
                     # equipment can only reside in clear terrain
                     terr = fc.getTerrain(" ")
                     sq.addequipment(equip)
+                elif (mutie != None):
+                    # mutant can only reside in clear terrain (for these purposes, at least)
+                    terr = fc.getTerrain(" ")
+                    mutie.setPosition(sq)
+                else:
+                    terr = fc.getTerrain(self.__boardlines[linenum][colnum])
                 sq.setTerrain(terr)
         return(board)
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-
 
