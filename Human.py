@@ -1,15 +1,29 @@
 __author__ = 'Fitz'
 
-import mutants.MovingPiece
+import mutants.PlayerPiece
 
-class Human(mutants.MovingPiece.MovingPiece):
+class Human(mutants.PlayerPiece.PlayerPiece):
     """
     The human pieces on the board are the basis of the victory conditions.
-    >>> bart = Human("Bart", "Bart", 4, 6, 6)
-    >>> molly = Human("Molly", "Molly", 6, 5, 4)
-    >>> charlie = Human("Charlie", "Charlie", 7, 3, 2)
+    >>> bart = Human("Bart")
+    >>> molly = Human("Molly")
+    >>> charlie = Human("Charlie")
+    >>> if charlie.canmove(): print("Charlie can move.")
+    Charlie can move.
     """
-    def __init__(self, name, image, movePts, hitPts, h2h):
-        super().__init__(name, image, movePts, hitPts)
-        self.handtohand = h2h
+    def __init__(self, name):
+        super().__init__(name)
+        self.__focus = False
+
+    @property
+    def focus(self):
+        return (self.__focus)
+
+    @focus.setter
+    def focus(self, onoff):
+        if onoff:
+            print("Human " + self.name + " has focus.")
+        self.__focus = onoff
+
+
 

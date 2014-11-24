@@ -7,7 +7,7 @@ import mutants.ExteriorSpace
 import mutants.Space
 import mutants.Door
 import mutants.Equipment
-#import mutants.Robot
+import mutants.Robot
 import mutants.Human
 import mutants.Wall
 import mutants.Constants
@@ -27,11 +27,9 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         mutants.Space.Space,
         mutants.Door.Door,
         mutants.Equipment.Equipment,
-        #mutants.Robot.Robot,
+        mutants.Robot.Robot,
         mutants.Human.Human
     ]
-
-    dirStrings = ["Up", "Down", "Left", "Right", "None"]
 
     def __init__(self, name="Mutant", image="Mutant", movePts=2, hitPts=2, h2h=2):
         super().__init__(name, image, movePts, hitPts)
@@ -55,7 +53,8 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             return (False)
         if dist > mutants.Constants.Constants.MAXMUTANTEYESIGHT:
             return (False)
-        #print("Looking at " + nsq.showing.name + " in direction " + self.dirStrings[diridx] + \
+        #print("Looking at " + nsq.showing.name + " in direction " + \
+        # mutants.Constants.Constants.dirStrings[diridx] + \
         #    " at distance " + str(dist))
         if type(nsq.showing) in self.MUTANTINTEREST:
             idx = self.MUTANTINTEREST.index(type(nsq.showing))
@@ -106,7 +105,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                 dirsatmax = []
             if thingsseen[i] == max and max > -1:
                 dirsatmax.append(i)
-        #print("Initial chosen direction is " + str(maxidx) + " = " + self.dirStrings[maxidx])
+        #print("Initial chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
         # If there are ties for chosen direction, pick one randomly.
         # Not ideal, but maybe it'll be enough.
         lendam = len(dirsatmax)
@@ -114,7 +113,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             tiebreaker = random.randint(0, lendam-1)
             #print("Length of tied array is " + str(lendam) + ", tiebreaker is " + str(tiebreaker))
             maxidx = dirsatmax[tiebreaker]
-        #print("Second chosen direction is " + str(maxidx) + " = " + self.dirStrings[maxidx])
+        #print("Second chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
         if maxidx == -1:
             # Need to go through the secondary list
             nonnegones = []
@@ -122,7 +121,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                 if thingsseen2ndary[i] != -1:
                     nonnegones.append(i)
             if len(nonnegones) == 1:
-                print("Non-negative - only 1 option")
+                #print("Non-negative - only 1 option")
                 maxidx = nonnegones[0]
             elif len(nonnegones) > 1:
                 nnidx = random.randint(0, len(nonnegones)-1)
@@ -131,19 +130,20 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                 maxidx = nonnegones[nnidx]
             else:
                 maxidx = -1    # all dressed up with nowhere to go
-        #print("Final chosen direction is " + str(maxidx) + " = " + self.dirStrings[maxidx])
+        #print("Final chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
         return (maxidx)     # direction to go
 
     def stringseen(self, seen):
         strret = ""
         for i in range(len(seen)):
             mistr = str(self.MUTANTINTEREST[seen[i]]).split(".")[2]
-            strret += str(i) + ":" + self.dirStrings[i] + ":" + str(seen[i]) + ":" + mistr + " "
+            strret += str(i) + ":" + mutants.Constants.Constants.dirStrings[diridx] + ":" + \
+                      str(seen[i]) + ":" + mistr + " "
         return (strret)
 
-    def move(self, direction):
+    def moveindirection(self, direction):
         dirct = self.chooseDirection()
-        #print("Moving mutant in direction " + str(dirct) + ": " + self.dirStrings[dirct])
+        #print("Moving mutant in direction " + str(dirct) + ": " + mutants.Constants.Constants.dirStrings[diridx])
         # this is not elegant...  need to figure out how to sew up the direction
         # strings and the offset from Constants.
         if dirct == 0:
@@ -155,8 +155,8 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         elif dirct == 3:
             go_to = mutants.Constants.Constants.RIGHT
         else:    # not moving this turn, I guess...
-            print("I can't move...  boo hoo hoo")
-            return
+            #print("I can't move...  boo hoo hoo")
+            return(False)
 
         if len(self.__squaresExplored) > mutants.Constants.Constants.MAXMUTANTSQUAREMEM:
             #print("Resetting squares explored")
@@ -169,7 +169,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             del self.__squaresExplored[-1]
         elif currsq not in self.__squaresExplored:
             self.__squaresExplored.append(currsq)
-        if super().move(go_to):
+        if super().moveindirection(go_to):
             self.__lastSpace = currsq
             # Trick mutants into not going back & forth through same door
             if currsq.getTerrain().name == "Door":
@@ -177,6 +177,9 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                     self.__doorsExplored.append(currsq)
                     if len(self.__doorsExplored) > 3:
                         del self.__doorsExplored[0]
+            return (True)
+        else:
+            return (False)
 
 if __name__ == "__main__":
     import doctest

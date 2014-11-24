@@ -4,6 +4,9 @@ import unittest
 import random
 
 import mutants.Game
+import mutants.Human
+import mutants.Constants
+import mutants.Robot
 
 class TestGame(unittest.TestCase):
     def setUp(self):
@@ -61,3 +64,47 @@ class TestGame(unittest.TestCase):
         g.nextwave()
         g.play(4000)
 
+    def testGY(self):
+        g = mutants.Game.Game("testboard9")
+        g.getmutants()
+        g.placemutants()
+        g.play(5000)
+        g.nextwave()
+        g.play(5000)
+        g.nextwave()
+        g.play(5000)
+
+    def test1Human(self):
+        g = mutants.Game.Game("testboard9")
+        g.getmutants()
+        g.placemutants()
+        bart = mutants.Human.Human("Bart")
+        g.placehuman(bart)
+        g.play(5000)
+
+    def testManyHumans(self):
+        g = mutants.Game.Game("testboard9")
+        g.getmutants()
+        g.placemutants()
+        bart = mutants.Human.Human("Bart")
+        g.placehuman(bart)
+        molly = mutants.Human.Human("Molly")
+        g.placehuman(molly)
+        charlie = mutants.Human.Human("Charlie")
+        g.placehuman(charlie)
+        g.play(5000)
+
+    def testHumansAndRobots(self):
+        g = mutants.Game.Game("testboard9")
+        g.getmutants()
+        g.placemutants()
+        bart = mutants.Human.Human("Bart")
+        g.placehuman(bart)
+        molly = mutants.Human.Human("Molly")
+        g.placehuman(molly)
+        charlie = mutants.Human.Human("Charlie")
+        g.placehuman(charlie)
+        for i in range(mutants.Constants.Constants.NUMROBOTS):
+            g.placerobot(mutants.Robot.Robot())
+
+        g.play(500000)

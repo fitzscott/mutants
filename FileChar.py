@@ -42,6 +42,7 @@ class FileChar():
             "-": ("ExteriorSpace", mutants.ExteriorSpace.ExteriorSpace)
         }
 
+        # attributes: H2H add, ranged damage, range, healing
         self.EquipCharLookup = {
             ">": ("Rifle",  2, 7, 10, 0),
             "=": ("Pistol", 1, 6, 4, 0),

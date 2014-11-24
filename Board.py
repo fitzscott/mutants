@@ -1,6 +1,7 @@
 __author__ = 'Fitz'
 
 import mutants.Square
+import mutants.Constants
 
 class Board():
     """
@@ -70,12 +71,12 @@ class Board():
 
         return(True)
 
-    def emptyexterior(self):
+    def emptyspace(self, inexterior="ExteriorSpace"):
         extsq = []
         for i in range(self.height):
             for j in range(self.width):
                 sq = self.getSquare(j, i)
-                if sq.getTerrain().name == "ExteriorSpace":
+                if sq.getTerrain().name == inexterior:
                     extsq.append(sq)
         return(extsq)
 
@@ -94,6 +95,43 @@ class Board():
                 sq = self.getSquare(j, i)
                 if sq.isOccupied() and sq.piece.name == "Mutant":
                     sq.removePiece()
+
+    def distance(self, sq1, sq2, checkifblocked=False):
+        """
+        Return distance between two squares on the board.
+        :param sq1: Square
+        :param sq2: Square
+        :param checkifblocked: Boolean
+        :return: integer of distance; -1 if blocked & check is requested
+        """
+        xdif = sq1.getXpos() - sq2.getXpos()
+        ydif = sq1.getYpos() - sq2.getYpos()
+        dist = abs(xdif) + abs(ydif)
+        sqonpath = sq1
+        if checkifblocked:
+            # This is a kludge.  Need to re-work it later.
+            while abs(xdif) + abs(ydif) > 0:
+                if abs(xdif) >= abs(ydif):
+                    # go left or right
+                    if xdif < 0:
+                        dirct = mutants.Constants.Constants.RIGHT
+                        xdif += 1
+                    else:
+                        dirct = mutants.Constants.Constants.LEFT
+                        xdif -= 1
+                else:
+                    # go up or down
+                    if ydif < 0:
+                        dirct = mutants.Constants.Constants.DOWN
+                        ydif += 1
+                    else:
+                        dirct = mutants.Constants.Constants.UP
+                        ydif -= 1
+                sqonpath = sqonpath.getNeighbor(dirct)
+                if sqonpath != sq2 and sqonpath.isblocking():
+                    dist = -1
+                    break
+        return (dist)
 
 if __name__ == "__main__":
     import doctest

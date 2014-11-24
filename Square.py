@@ -40,18 +40,25 @@ class Square():
         :return: Boolean
         """
         if (not self.__terrain.movethru(piece)):
-            #print("Cannot move " + piece.name + " through " + self.__terrain.name)
+            print("Cannot move " + piece.name + " through " + self.__terrain.name)
             return (False)
         if (not self.isOccupied()):
+            #if piece.name != "Mutant":
+            #    print("Adding piece " + piece.name + " to (" + str(self.getXpos()) + \
+            #          ", " + str(self.getYpos()) + ")")
             self.__piece = piece
             if self.hasequipment():
                 piece.pickup(self.takeequipment())
             return(True)
         else:       # Can't move into an occupied square (for now)
+            #print("Square at (" + str(self.getXpos()) + ", " + str(self.getYpos()) + ") is occupied." )
             return(False)
 
     def removePiece(self):
-        self.__piece = None
+        if self.__piece != None:
+            if self.__piece.name != "Mutant":
+                print("Removing " + self.__piece.name + " from (" + str(self.__xpos) + ", " + str(self.__ypos) + ")")
+            self.__piece = None
 
     def getTerrain(self):
         return(self.__terrain)
@@ -105,6 +112,20 @@ class Square():
         else:
             whatsShowing = self.__terrain
         return (whatsShowing)
+
+    def distanceto(self, sq, checkblocked=True):
+        return (self.__board.distance(self, sq, checkblocked))
+
+    def isblocking(self):
+        #return (self.isOccupied() or self.getTerrain().name == "Wall" or self.getTerrain().name == "Door")
+        return (self.isOccupied() or self.getTerrain().name == "Wall")
+
+    def attackpiece(self, damage):
+        if self.__piece != None:
+            result = self.__piece.damage(damage)
+            if result:     #  piece was killed
+                self.removePiece()
+                self.__board
 
 if __name__ == "__main__":
     import doctest

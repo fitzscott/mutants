@@ -21,6 +21,10 @@ class Piece:
     def name(self):
         return(self.__name)
 
+    @property
+    def fullname(self):
+        return(self.__name)
+
     def getPosition(self):
         return(self.__square)
 
@@ -29,6 +33,10 @@ class Piece:
         :type square: Square
         Can't seem to import it, though - will it still work?
         """
+        #if self.name != "Mutant":
+        #    print("In setPosition for " + self.name)
+        if square == None:
+            return (False)
         if (square.addPiece(self)):
             self.__square = square
             return (True)

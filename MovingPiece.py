@@ -24,6 +24,7 @@ class MovingPiece(Piece):
         self.__ranged = 0
         self.__carried = None
         self.__lastsquare = None
+        self.__hasattacked = False
 
     def resetMovement(self):
         self.__moveRemaining = self.__movePts
@@ -31,10 +32,35 @@ class MovingPiece(Piece):
     def getRemainingMovement(self):
         return (self.__moveRemaining)
 
+    def canmove(self):
+        #print("In canmove for " + self.fullname + " w/ move remaining: " + str(self.__moveRemaining))
+        return (self.__moveRemaining > 0)
+
     def decrRemaining(self, howmany=1):
         self.__moveRemaining -= howmany
 
-    def move(self, direction):
+    def movetosquare(self, newsq, currsq=None):
+        if currsq == None:
+            currsq = self.__lastsquare = self.getPosition()
+        if (newsq != None):
+            dist = currsq.distanceto(newsq)
+            if dist == -1:
+                #print("Cannot move " + self.fullname + " through that.")
+                return (False)
+            if (dist <= self.getRemainingMovement()):
+                if (self.setPosition(newsq)):
+                    currsq.removePiece()
+                    self.decrRemaining(dist)
+                    return (True)
+                else:
+                    print("Piece " + self.name + " cannot move to that square.")
+            else:
+                print("Insufficient remaining movement for " + self.fullname)
+        else:
+            print("Piece " + self.name + " cannot move off the board.")
+        return (False)
+
+    def moveindirection(self, direction):
         #print("Moving " + self.name)
         if (self.__moveRemaining <= 0):
             print(self.name + " has no remaining movement points.")
@@ -42,20 +68,13 @@ class MovingPiece(Piece):
 
         currsq = self.__lastsquare = self.getPosition()
         newsq = currsq.getNeighbor(direction)
-        if (newsq != None):
-            if (self.setPosition(newsq)):
-                currsq.removePiece()
-                self.decrRemaining()
-                return (True)
-            else:
-                print("Piece " + self.name + " cannot move to that square.")
-        else:
-            print("Piece " + self.name + " cannot move off the board.")
-
-        return (False)
+        return (self.movetosquare(newsq, currsq))
 
     def damage(self, amount):
         self.__hitPts -= amount
+        return(self.__hitPts <= 0)
+
+    def alive(self):
         return(self.__hitPts > 0)
 
     def heal(self, amount):
@@ -73,14 +92,67 @@ class MovingPiece(Piece):
     def handtohand(self, h2h):
         self.__handtohand = h2h
 
+    @property
+    def ranged(self):
+        if (self.__carried != None):
+            totalranged = self.__ranged + self.__carried.rangedattack
+        else:
+            totalranged = 0    #  Cannot do a ranged attack w/o a ranged weapon
+        return (totalranged)
+
+    @ranged.setter
+    def ranged(self, ranged):
+        self.__ranged = ranged
+
     def pickup(self, tool):
         """
         move into a square and pick up what's there
         :type tool: mutants.Equipment.Equipment
         """
-        if self.__carried != None:
+        if self.__carried != None and self.__lastsquare != None:
             self.__lastsquare.addequipment(self.__carried)
         self.__carried = tool
+
+    @property
+    def hasattacked(self):
+        return(self.__hasattacked)
+
+    @hasattacked.setter
+    def hasattacked(self, att):
+        print("In hasattacked(" + str(att) + ") setter for " + self.fullname)
+        self.__hasattacked = att
+
+    def hthattack(self, sq):
+        sq.attackpiece(self.handtohand)
+        return (True)
+
+    def rngattack(self, sq, dist):
+        print("In ranged attack for " + self.fullname)
+        if self.ranged:
+            # if ranged is positive, must have a ranged weapon
+            if self.__carried.effectiverange >= dist:
+                sq.attackpiece(self.ranged)
+                ret = True
+            else:
+                print("That target is out of range.")
+                ret = False
+        else:
+            print("Cannot do ranged attack.")
+            ret = False
+        return (ret)
+
+    def attack(self, sq):
+        result = False
+        if self.hasattacked:
+            return (False)
+        dist = self.getPosition().distanceto(sq)
+        if dist == -1:
+            print("Cannot attack there")
+        else:
+            if dist == 1:
+                self.hasattacked = self.hthattack(sq)
+            else:
+                self.hasattacked = self.rngattack(sq, dist)
 
 if __name__ == "__main__":
     import doctest
