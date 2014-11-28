@@ -31,7 +31,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         mutants.Human.Human
     ]
 
-    def __init__(self, name="Mutant", image="Mutant", movePts=2, hitPts=2, h2h=2):
+    def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=2, h2h=2):
         super().__init__(name, image, movePts, hitPts)
         self.handtohand = h2h
         self.__dir2go = 0
@@ -40,62 +40,70 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         self.__lastSpace = None
         self.__doorsExplored = []
         self.__squaresExplored = []
+        self.__number = 0
 
-    def doneLooking(self, sq):
+    @property
+    def number(self):
+        return(self.__number)
+
+    @number.setter
+    def number(self, num):
+        self.__number = num
+
+    @property
+    def fullname(self):
+        return(self.name + " " + str(self.number))
+
+    def moretosee(self, sq):
         nm = sq.showing.name
-        return(nm != "Wall" and nm != "Door" and nm != "Mutant")
+        #return(nm != "Wall" and nm != "Door" and nm != "Mutant")
+        return(nm != "Wall" and nm != "Mutant")
 
-    def checkDirection(self, sq, dir, dist, seenGood, seenOk, diridx):
+    def evaluatesquare(self, sq, dirct, dist=1):
         if sq == None:
-            return (False)
-        nsq = sq.getNeighbor(dir, dist)
+            return (None)
+        nsq = sq.getNeighbor(dirct, dist)
+        if nsq == None:
+            return (None)
+        if dist > mutants.Constants.Constants.MAXMUTANTEYESIGHT:
+            return (None)
+        if not self.moretosee(nsq):
+            return (None)
+        return(nsq)
+
+    def checkDirection(self, sq, dirct, dist, seenGood, seenOk, diridx):
+        nsq = self.evaluatesquare(sq, dirct, dist)
         if nsq == None:
             return (False)
-        if dist > mutants.Constants.Constants.MAXMUTANTEYESIGHT:
-            return (False)
-        #print("Looking at " + nsq.showing.name + " in direction " + \
-        # mutants.Constants.Constants.dirStrings[diridx] + \
-        #    " at distance " + str(dist))
-        if type(nsq.showing) in self.MUTANTINTEREST:
-            idx = self.MUTANTINTEREST.index(type(nsq.showing))
-            if idx > seenOk[diridx]:
-                seenOk[diridx] = idx
-                if nsq not in self.__squaresExplored and \
-                        nsq not in self.__doorsExplored:
-                    seenGood[diridx] = idx
-                    #print("        Really good!")
-                #print("I see something more interesting: " + nsq.showing.name)
-        return(self.doneLooking(nsq))
+        idx = self.MUTANTINTEREST.index(type(nsq.showing))
+        if idx > seenOk[diridx]:
+            seenOk[diridx] = idx
+            if idx > 3 or nsq not in self.__squaresExplored and \
+                    nsq not in self.__doorsExplored:
+                seenGood[diridx] = idx
+        return(True)
 
     def chooseDirection(self):
+        #self.message(self.fullname + ": Choosing direction")
         sq = self.square
         distance = 1
         things2find = True
         thingsseen = [-1, -1, -1, -1]   # up, down, left, right
         thingsseen2ndary = [-1, -1, -1, -1]   # up, down, left, right
-        up = True
-        down = True
-        left = True
-        right = True
+        dirbools = [True, True, True, True]
         # look around a bit
         while things2find:
-            if up:
-                up = self.checkDirection(sq, mutants.Constants.Constants.UP, distance, \
-                                         thingsseen, thingsseen2ndary, 0)
-            if down:
-                down = self.checkDirection(sq, mutants.Constants.Constants.DOWN, distance, \
-                                         thingsseen, thingsseen2ndary, 1)
-            if left:
-                left = self.checkDirection(sq, mutants.Constants.Constants.LEFT, distance, \
-                                         thingsseen, thingsseen2ndary, 2)
-            if right:
-                right = self.checkDirection(sq, mutants.Constants.Constants.RIGHT, distance, \
-                                         thingsseen, thingsseen2ndary, 3)
+            for diridx in range(len(dirbools)):
+                if dirbools[diridx]:
+                    dirbools[diridx] = self.checkDirection(sq, mutants.Constants.Constants.directions[diridx], \
+                                                        distance, thingsseen, thingsseen2ndary, diridx)
+                    if thingsseen[diridx] > 3:      #  A real target
+                        dirbools[diridx] = False
             distance += 1
-            things2find = up or down or left or right
+            things2find = dirbools[0] or dirbools[1] or dirbools[2]or dirbools[3]
+        #self.message(self.fullname + " pri: " + self.stringseen(thingsseen) + \
+        #    ", 2nd: " + self.stringseen(thingsseen2ndary))
         # Record how many ties we have for chosen direction
-        #print("Primary seen: " + self.stringseen(thingsseen))
-        #print("Secondary seen: " + self.stringseen(thingsseen2ndary))
         dirsatmax = []
         max = maxidx = -1
         for i in range(len(thingsseen)):
@@ -136,26 +144,17 @@ class Mutant(mutants.MovingPiece.MovingPiece):
     def stringseen(self, seen):
         strret = ""
         for i in range(len(seen)):
-            mistr = str(self.MUTANTINTEREST[seen[i]]).split(".")[2]
-            strret += str(i) + ":" + mutants.Constants.Constants.dirStrings[diridx] + ":" + \
-                      str(seen[i]) + ":" + mistr + " "
+            mistr = str(self.MUTANTINTEREST[seen[i]]).split(".")[2][0:4]
+            strret += mutants.Constants.Constants.dirStrings[i] + ":" + mistr + " "
         return (strret)
 
     def moveindirection(self, direction):
         dirct = self.chooseDirection()
-        #print("Moving mutant in direction " + str(dirct) + ": " + mutants.Constants.Constants.dirStrings[diridx])
-        # this is not elegant...  need to figure out how to sew up the direction
-        # strings and the offset from Constants.
-        if dirct == 0:
-            go_to = mutants.Constants.Constants.UP
-        elif dirct == 1:
-            go_to = mutants.Constants.Constants.DOWN
-        elif dirct == 2:
-            go_to = mutants.Constants.Constants.LEFT
-        elif dirct == 3:
-            go_to = mutants.Constants.Constants.RIGHT
+        #self.message("Moving mutant in direction " + str(dirct) + ": " + mutants.Constants.Constants.dirStrings[dirct])
+        if dirct != -1:
+            go_to = mutants.Constants.Constants.directions[dirct]
         else:    # not moving this turn, I guess...
-            #print("I can't move...  boo hoo hoo")
+            self.message(self.fullname + " can't move...  boo hoo hoo")
             return(False)
 
         if len(self.__squaresExplored) > mutants.Constants.Constants.MAXMUTANTSQUAREMEM:
@@ -180,6 +179,20 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             return (True)
         else:
             return (False)
+
+    def attacktarget(self):
+        target = None
+        if self.carried != None and self.carried.effectiverange > 0:
+            maxdist = self.carried.effectiverange
+        else:
+            maxdist = 1         # hand-to-hand only
+        for dirct in mutants.Constants.Constants.directions:
+            nsq = self.getPosition().getNeighbor(dirct)
+            goodsq = self.evaluatesquare(nsq, dirct)
+            if goodsq != None and self.MUTANTINTEREST.index(type(goodsq.showing)) > 3:
+                self.message(self.fullname + " is attacking " + goodsq.showing.fullname)
+                self.attack(goodsq)
+                break       # only get to attack once
 
 if __name__ == "__main__":
     import doctest

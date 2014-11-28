@@ -30,16 +30,20 @@ class Game():
         self.__board = self.__display.board
         self.__mutantturn = True
 
-    def getmutants(self):
+    def getmutants(self, overridenum=0):
         # If the board comes pre-defined with mutants, don't add new ones.
         resmuties = self.__board.residentmutants()
         if len(resmuties) > 0:
             self.__mutants = resmuties
             return
-        nummutants = mutants.Constants.Constants.MUTANTSPERWAVE[self.__wave]
+        if overridenum:
+            nummutants = overridenum
+        else:
+            nummutants = mutants.Constants.Constants.MUTANTSPERWAVE[self.__wave]
         self.__mutants = []
         for i in range(nummutants):
             self.__mutants.append(mutants.Mutant.Mutant())
+            self.__mutants[i].number = i
 
     def placemutants(self):
         stagingarea = self.__board.emptyspace()
@@ -73,14 +77,16 @@ class Game():
         self.placeplayerpiece(robot, self.__playerpieces, sq)
 
     def movemutants(self):
-        #print("Game is moving the mutants - size: " + str(len(self.__mutants)))
         for i in range(len(self.__mutants)):
-            print("Moving mutant " + str(i) + ": " + self.__mutants[i].name)
             nummoves = 0
             while self.__mutants[i].moveindirection(None):
                 nummoves += 1
-                print("Mutant " + str(i) + " has moved " + str(nummoves) + " space(s).")
             self.__mutants[i].resetMovement()
+
+    def mutantattack(self):
+        for i in range(len(self.__mutants)):
+            if self.__mutants[i].alive():
+                self.__mutants[i].attacktarget()
 
     def play(self, maxloops=10000000):
         self.__display.runLoop(maxloops)
@@ -124,7 +130,8 @@ class Game():
         return(ret)
 
     def wavecomplete(self):
-        return(len(self.__playerpieces) == 0 or len(self.__mutants) == 0)
+        #return(len(self.__playerpieces) == 0 or len(self.__mutants) == 0)
+        return(len(self.__mutants) == 0)
 
     def nextwave(self):
         self.__wave += 1

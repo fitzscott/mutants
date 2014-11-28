@@ -1,5 +1,7 @@
 __author__ = 'Fitz'
 
+import random
+
 from mutants.Piece import Piece
 import mutants.Constants
 
@@ -39,18 +41,26 @@ class MovingPiece(Piece):
     def decrRemaining(self, howmany=1):
         self.__moveRemaining -= howmany
 
+    def message(self, msg):
+        self.getPosition().sendmessage(msg)
+
     def movetosquare(self, newsq, currsq=None):
         if currsq == None:
             currsq = self.__lastsquare = self.getPosition()
+        if newsq == currsq:
+            return (False)
         if (newsq != None):
             dist = currsq.distanceto(newsq)
             if dist == -1:
-                #print("Cannot move " + self.fullname + " through that.")
+                self.message("Cannot move " + self.fullname + " through that.")
                 return (False)
             if (dist <= self.getRemainingMovement()):
                 if (self.setPosition(newsq)):
                     currsq.removePiece()
                     self.decrRemaining(dist)
+                    if self.name != "Mutant":
+                        self.message(self.synopsis() + " moving " + self.fullname + " to (" + \
+                                     str(newsq.getXpos()) + ", " + str(newsq.getYpos()) + ")")
                     return (True)
                 else:
                     print("Piece " + self.name + " cannot move to that square.")
@@ -63,7 +73,7 @@ class MovingPiece(Piece):
     def moveindirection(self, direction):
         #print("Moving " + self.name)
         if (self.__moveRemaining <= 0):
-            print(self.name + " has no remaining movement points.")
+            #print(self.name + " has no remaining movement points.")
             return (False)
 
         currsq = self.__lastsquare = self.getPosition()
@@ -83,7 +93,7 @@ class MovingPiece(Piece):
     @property
     def handtohand(self):
         if (self.__carried != None):
-            totalh2h = self.__handtohand + self.__carried.handtohandadd
+            totalh2h = self.__handtohand + self.__carried.handtohandhitbonus
         else:
             totalh2h = self.__handtohand
         return (totalh2h)
@@ -93,9 +103,17 @@ class MovingPiece(Piece):
         self.__handtohand = h2h
 
     @property
+    def handtohanddamage(self):
+        if (self.__carried != None):
+            equipdamage = self.__carried.handtohanddamagebonus
+        else:
+            equipdamage = 0
+        return (self.__handtohand + equipdamage)
+
+    @property
     def ranged(self):
         if (self.__carried != None):
-            totalranged = self.__ranged + self.__carried.rangedattack
+            totalranged = self.__ranged + self.__carried.rangedhitbonus
         else:
             totalranged = 0    #  Cannot do a ranged attack w/o a ranged weapon
         return (totalranged)
@@ -103,6 +121,14 @@ class MovingPiece(Piece):
     @ranged.setter
     def ranged(self, ranged):
         self.__ranged = ranged
+
+    @property
+    def rangeddamage(self):
+        if (self.__carried != None):
+            damage = self.__carried.rangeddamage
+        else:
+            damage = 0      # this should never happen
+        return (damage)
 
     def pickup(self, tool):
         """
@@ -119,25 +145,45 @@ class MovingPiece(Piece):
 
     @hasattacked.setter
     def hasattacked(self, att):
-        print("In hasattacked(" + str(att) + ") setter for " + self.fullname)
         self.__hasattacked = att
 
     def hthattack(self, sq):
-        sq.attackpiece(self.handtohand)
+        # Determine if the attack hits
+        dieroll = random.randint(0, 5) + 1
+        if dieroll + self.handtohand > mutants.Constants.Constants.TOHIT:
+            self.message(self.fullname + " attacks for " + str(self.handtohanddamage) + " damage.")
+            sq.attackpiece(self.handtohanddamage)
+        else:
+            if self.carried != None:
+                descrstr = " with a " + self.carried.name
+            else:
+                descrstr = " with no weapon"
+            self.message(self.fullname + " missed" + descrstr)
         return (True)
 
     def rngattack(self, sq, dist):
-        print("In ranged attack for " + self.fullname)
         if self.ranged:
             # if ranged is positive, must have a ranged weapon
             if self.__carried.effectiverange >= dist:
-                sq.attackpiece(self.ranged)
+                if dist > self.__carried.effectiverange // 2:
+                    rangepenalty = - 1
+                else:
+                    rangepenalty = - 1
+                # Determine if the attack hits
+                dieroll = random.randint(0, 5) + 1
+                if dieroll + self.ranged >= mutants.Constants.Constants.TOHIT:
+                    # It's a hit!
+                    damage = self.rangeddamage + rangepenalty
+                    sq.attackpiece(damage)
+                    self.message(self.fullname + " hit for " + str(damage) + " damage!")
+                else:
+                    self.message(self.fullname + " missed with the " + self.__carried.name)
                 ret = True
             else:
-                print("That target is out of range.")
+                self.message("That target is out of range.")
                 ret = False
         else:
-            print("Cannot do ranged attack.")
+            self.message(self.fullname + " has nothing to attack with at range.")
             ret = False
         return (ret)
 
@@ -147,12 +193,24 @@ class MovingPiece(Piece):
             return (False)
         dist = self.getPosition().distanceto(sq)
         if dist == -1:
-            print("Cannot attack there")
+            print(self.fullname + " cannot hit that target.")
         else:
             if dist == 1:
                 self.hasattacked = self.hthattack(sq)
             else:
                 self.hasattacked = self.rngattack(sq, dist)
+
+    def synopsis(self):
+        if self.__carried == None:
+            carriedstr = "nothing"
+        else:
+            carriedstr = self.__carried.name
+        return(self.fullname + ", hit points: " + str(self.__hitPts) + ", remaining move: " \
+               + str(self.getRemainingMovement()) + ", carrying " + carriedstr)
+
+    @property
+    def carried(self):
+        return(self.__carried)
 
 if __name__ == "__main__":
     import doctest

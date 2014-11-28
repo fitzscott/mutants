@@ -22,6 +22,24 @@ class PlayerPiece(mutants.MovingPiece.MovingPiece):
             super().__init__(name, name, mov, hp)
             self.handtohand = h2h
             self.ranged = rng
+            self.__focus = False
         else:
             print("No attributes for player piece " + name)
+
+    @property
+    def focus(self):
+        return (self.__focus)
+
+    @focus.setter
+    def focus(self, onoff):
+        self.__focus = onoff
+        if onoff:
+            self.getPosition().sendmessage(self.synopsis())
+
+    def special(self):
+        """
+        Defines the special ability of this piece.
+        :return:  boolean
+        """
+        return(False)
 

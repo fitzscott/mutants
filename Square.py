@@ -56,8 +56,8 @@ class Square():
 
     def removePiece(self):
         if self.__piece != None:
-            if self.__piece.name != "Mutant":
-                print("Removing " + self.__piece.name + " from (" + str(self.__xpos) + ", " + str(self.__ypos) + ")")
+            #if self.__piece.name != "Mutant":
+            #    print("Removing " + self.__piece.name + " from (" + str(self.__xpos) + ", " + str(self.__ypos) + ")")
             self.__piece = None
 
     def getTerrain(self):
@@ -124,8 +124,13 @@ class Square():
         if self.__piece != None:
             result = self.__piece.damage(damage)
             if result:     #  piece was killed
+                equip = self.__piece.carried
                 self.removePiece()
-                self.__board
+                if equip != None:
+                    self.addequipment(equip)
+
+    def sendmessage(self, msg):
+        self.__board.addmessage(msg)
 
 if __name__ == "__main__":
     import doctest

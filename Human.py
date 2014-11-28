@@ -15,15 +15,3 @@ class Human(mutants.PlayerPiece.PlayerPiece):
         super().__init__(name)
         self.__focus = False
 
-    @property
-    def focus(self):
-        return (self.__focus)
-
-    @focus.setter
-    def focus(self, onoff):
-        if onoff:
-            print("Human " + self.name + " has focus.")
-        self.__focus = onoff
-
-
-

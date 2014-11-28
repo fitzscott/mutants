@@ -42,17 +42,17 @@ class FileChar():
             "-": ("ExteriorSpace", mutants.ExteriorSpace.ExteriorSpace)
         }
 
-        # attributes: H2H add, ranged damage, range, healing
+        # attributes: H2H hit bonus, H2H damage bonus, ranged bonus, ranged damage, range, healing
         self.EquipCharLookup = {
-            ">": ("Rifle",  2, 7, 10, 0),
-            "=": ("Pistol", 1, 6, 4, 0),
-            "x": ("Axe", 7, 0, 0, 0, 0),
-            "~": ("Extinguisher", 2, 1, 2, 0),
-            "+": ("FirstAid", 1, 0, 0, 3),
-            "*": ("Shotgun", 2, 9, 3, 0),
-            "!": ("Bat", 3, 0, 0, 0),
-            "|": ("Pipe", 4, 0, 0, 0),
-            "^": ("SpareParts", 0, 0, 0, 0)
+            ">": ("Rifle",        2, 2, 4, 7, 10, 0),
+            "=": ("Pistol",       1, 1, 2, 6, 6, 0),
+            "x": ("Axe",          3, 7, 0, 0, 0, 0),
+            "~": ("Extinguisher", 2, 2, 0, 1, 2, 0),
+            "+": ("FirstAid",     0, 1, 0, 0, 0, 3),
+            "*": ("Shotgun",      2, 2, 4, 9, 4, 0),
+            "!": ("Bat",          4, 3, 0, 0, 0, 0),
+            "|": ("Pipe",         4, 4, 0, 0, 0, 0),
+            "^": ("SpareParts",   0, 0, 0, 0, 0, 0)
         }
 
     def getTerrain(self, boardchar):
@@ -64,14 +64,16 @@ class FileChar():
         nm = None
         if boardchar in self.EquipCharLookup:
             nm = self.EquipCharLookup[boardchar][0]
-            hth = self.EquipCharLookup[boardchar][1]
-            rnga = self.EquipCharLookup[boardchar][2]
-            rng = self.EquipCharLookup[boardchar][3]
-            heal = self.EquipCharLookup[boardchar][4]
+            hth_hit = self.EquipCharLookup[boardchar][1]
+            hth_dam = self.EquipCharLookup[boardchar][2]
+            rng_hit = self.EquipCharLookup[boardchar][3]
+            rng_dam = self.EquipCharLookup[boardchar][4]
+            rng = self.EquipCharLookup[boardchar][5]
+            heal = self.EquipCharLookup[boardchar][6]
         if (nm == None):
             equip = None
         else:
-            equip = mutants.Equipment.Equipment(nm, nm, hth, rnga, rng, heal)
+            equip = mutants.Equipment.Equipment(nm, nm, hth_hit, hth_dam, rng_hit, rng_dam, rng, heal)
         return(equip)
 
     def getMutant(self, boardchar):

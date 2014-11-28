@@ -43,4 +43,8 @@ class TestBoard(unittest.TestCase):
         sqN = sq.getNeighbor(mutants.Constants.Constants.RIGHT)
         self.assertEqual(sqN.getXpos(), 9)
 
+    def testBelowBoard(self):
+        sq = self.__board.getSquare(7, 7)
+        self.assertEqual(sq, None)
+
 

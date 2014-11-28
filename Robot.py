@@ -21,16 +21,6 @@ class Robot(mutants.PlayerPiece.PlayerPiece):
         self.pickup(rifle)
 
     @property
-    def focus(self):
-        return (self.__focus)
-
-    @focus.setter
-    def focus(self, onoff):
-        if onoff:
-            print("Robot " + self.name + " has focus.")
-        self.__focus = onoff
-
-    @property
     def fullname(self):
         return("RO" + str(self.__number))
 

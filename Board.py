@@ -1,5 +1,7 @@
 __author__ = 'Fitz'
 
+import math
+
 import mutants.Square
 import mutants.Constants
 
@@ -26,6 +28,8 @@ class Board():
         self.__squares = []
         self.__width = 0
         self.__height = 0
+        self.__messages = []
+        self.__maxmessages = 1
 
     @property
     def width(self):
@@ -76,7 +80,7 @@ class Board():
         for i in range(self.height):
             for j in range(self.width):
                 sq = self.getSquare(j, i)
-                if sq.getTerrain().name == inexterior:
+                if sq.getTerrain().name == inexterior and not sq.hasequipment():
                     extsq.append(sq)
         return(extsq)
 
@@ -104,34 +108,58 @@ class Board():
         :param checkifblocked: Boolean
         :return: integer of distance; -1 if blocked & check is requested
         """
-        xdif = sq1.getXpos() - sq2.getXpos()
-        ydif = sq1.getYpos() - sq2.getYpos()
-        dist = abs(xdif) + abs(ydif)
+        xcurincr = 0.0
+        ycurincr = 0.0
+        xdif = sq2.getXpos() - sq1.getXpos()
+        if xdif > 0:
+            xdirct = mutants.Constants.Constants.RIGHT
+        else:
+            xdirct = mutants.Constants.Constants.LEFT
+        ydif = sq2.getYpos() - sq1.getYpos()
+        if ydif > 0:
+            ydirct = mutants.Constants.Constants.DOWN
+        else:
+            ydirct = mutants.Constants.Constants.UP
+        dist = abs(xdif) + abs(ydif)        # simple square-bound movement distance
+        xincrdif = xdif / dist
+        yincrdif = ydif / dist
         sqonpath = sq1
         if checkifblocked:
-            # This is a kludge.  Need to re-work it later.
-            while abs(xdif) + abs(ydif) > 0:
-                if abs(xdif) >= abs(ydif):
-                    # go left or right
-                    if xdif < 0:
-                        dirct = mutants.Constants.Constants.RIGHT
-                        xdif += 1
-                    else:
-                        dirct = mutants.Constants.Constants.LEFT
-                        xdif -= 1
-                else:
-                    # go up or down
-                    if ydif < 0:
-                        dirct = mutants.Constants.Constants.DOWN
-                        ydif += 1
-                    else:
-                        dirct = mutants.Constants.Constants.UP
-                        ydif -= 1
-                sqonpath = sqonpath.getNeighbor(dirct)
-                if sqonpath != sq2 and sqonpath.isblocking():
+            #while sqonpath != sq2:
+            while sqonpath != sq2 and (abs(xcurincr) < abs(xdif) or abs(ycurincr) < abs(ydif)):
+                xcurincr += xincrdif
+                if abs(xcurincr) >= 1:
+                    sqonpath = sqonpath.getNeighbor(xdirct)
+                    xcurincr -=  math.copysign(1, xdif)
+                ycurincr += yincrdif
+                if abs(ycurincr) >= 1:
+                    sqonpath = sqonpath.getNeighbor(ydirct)
+                    ycurincr -= math.copysign(1, ydif)
+                if sqonpath != sq2 and sqonpath != sq1 and sqonpath.isblocking():
+                    print("Can't get there from here")
                     dist = -1
                     break
+            assert(dist == -1 or sqonpath == sq2)
         return (dist)
+
+    def addmessage(self, msg):
+        if len(self.__messages) > 1 and msg[0:8] == self.__messages[-1][0:8]:
+            del self.__messages[-1]
+        if len(self.__messages) >= self.__maxmessages:
+            del self.__messages[0]
+        self.__messages.append(msg)
+
+    @property
+    def messages(self):
+        return(self.__messages)
+
+    @property
+    def maxmessages(self):
+        return(self.__maxmessages)
+
+    @maxmessages.setter
+    def maxmessages(self, cnt):
+        self.__maxmessages = cnt
 
 if __name__ == "__main__":
     import doctest

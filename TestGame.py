@@ -106,5 +106,26 @@ class TestGame(unittest.TestCase):
         g.placehuman(charlie)
         for i in range(mutants.Constants.Constants.NUMROBOTS):
             g.placerobot(mutants.Robot.Robot())
+        g.play(500000)
 
+    def testBadMove(self):
+        g = mutants.Game.Game("testboardA")
+        g.getmutants(5)
+        g.placemutants()
+        for i in range(3):
+            g.placerobot(mutants.Robot.Robot())
+        g.play(500000)
+
+    def testNewDist(self):
+        g = mutants.Game.Game("testboardA")
+        g.getmutants(2)
+        g.placemutants()
+        charlie = mutants.Human.Human("Charlie")
+        g.placehuman(charlie)
+        g.play(500000)
+
+    def testMutantDirectionsAgain(self):
+        g = mutants.Game.Game("testboardA")
+        g.getmutants(2)
+        g.placemutants()
         g.play(500000)

@@ -25,6 +25,10 @@ class Piece:
     def fullname(self):
         return(self.__name)
 
+    @property
+    def image(self):
+        return (self.__image)
+
     def getPosition(self):
         return(self.__square)
 
