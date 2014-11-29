@@ -158,6 +158,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             self.message(self.fullname + " can't move...  boo hoo hoo")
             return(False)
 
+        # check if it's a door.  Mutants must smash doors to go through
         if len(self.__squaresExplored) > mutants.Constants.Constants.MAXMUTANTSQUAREMEM:
             #print("Resetting squares explored")
             self.__squaresExplored = []

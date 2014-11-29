@@ -43,11 +43,8 @@ class Square():
             print("Cannot move " + piece.name + " through " + self.__terrain.name)
             return (False)
         if (not self.isOccupied()):
-            #if piece.name != "Mutant":
-            #    print("Adding piece " + piece.name + " to (" + str(self.getXpos()) + \
-            #          ", " + str(self.getYpos()) + ")")
             self.__piece = piece
-            if self.hasequipment():
+            if self.hasequipment() and piece.wantpickup:
                 piece.pickup(self.takeequipment())
             return(True)
         else:       # Can't move into an occupied square (for now)
@@ -113,12 +110,19 @@ class Square():
             whatsShowing = self.__terrain
         return (whatsShowing)
 
-    def distanceto(self, sq, checkblocked=True):
-        return (self.__board.distance(self, sq, checkblocked))
+    def distanceto(self, sq, checkblocked=True, checkdoor=False):
+        return (self.__board.distance(self, sq, checkblocked, checkdoor))
 
-    def isblocking(self):
-        #return (self.isOccupied() or self.getTerrain().name == "Wall" or self.getTerrain().name == "Door")
-        return (self.isOccupied() or self.getTerrain().name == "Wall")
+    def isblocking(self, checkdoors=False):
+        #print("Checking whether we can attack through " + self.getTerrain().name)
+        terr = self.getTerrain()
+        ternm = terr.name
+        if checkdoors:
+            #print("    We should also check doors for " + self.getTerrain().name)
+            return (self.isOccupied() or ternm == "Wall" or \
+                    (ternm == "Door" and not terr.getmovethru()))
+        else:
+            return (self.isOccupied() or self.getTerrain().name == "Wall")
 
     def attackpiece(self, damage):
         if self.__piece != None:

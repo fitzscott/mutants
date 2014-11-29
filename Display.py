@@ -181,14 +181,30 @@ class Display():
                         drawwhiterect = True
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
-                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.UP)
-                    if event.key == pygame.K_DOWN:
-                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.DOWN)
-                    if event.key == pygame.K_LEFT:
-                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.LEFT)
-                    if event.key == pygame.K_RIGHT:
-                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.RIGHT)
+                    piece = self.__game.piecewithfocus()
+                    if piece != None:
+                        pickup = not (pygame.key.get_mods() & KMOD_SHIFT)
+                        if pickup:
+                            print(piece.fullname + " is in pick-up mode")
+                        else:
+                            print(piece.fullname + " does not want to pick stuff up")
+                        piece.wantpickup = pickup
+                        if event.key == pygame.K_UP:
+                            piece.moveindirection(mutants.Constants.Constants.UP)
+                        if event.key == pygame.K_DOWN:
+                            piece.moveindirection(mutants.Constants.Constants.DOWN)
+                        if event.key == pygame.K_LEFT:
+                            piece.moveindirection(mutants.Constants.Constants.LEFT)
+                        if event.key == pygame.K_RIGHT:
+                            piece.moveindirection(mutants.Constants.Constants.RIGHT)
+                    #if event.key == pygame.K_UP:
+                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.UP)
+                    #if event.key == pygame.K_DOWN:
+                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.DOWN)
+                    #if event.key == pygame.K_LEFT:
+                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.LEFT)
+                    #if event.key == pygame.K_RIGHT:
+                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.RIGHT)
 
             self.drawboard(drawwhiterect)
             self.message()

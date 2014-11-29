@@ -100,7 +100,7 @@ class Board():
                 if sq.isOccupied() and sq.piece.name == "Mutant":
                     sq.removePiece()
 
-    def distance(self, sq1, sq2, checkifblocked=False):
+    def distance(self, sq1, sq2, checkifblocked=False, checkdoors=False):
         """
         Return distance between two squares on the board.
         :param sq1: Square
@@ -135,7 +135,7 @@ class Board():
                 if abs(ycurincr) >= 1:
                     sqonpath = sqonpath.getNeighbor(ydirct)
                     ycurincr -= math.copysign(1, ydif)
-                if sqonpath != sq2 and sqonpath != sq1 and sqonpath.isblocking():
+                if sqonpath != sq2 and sqonpath != sq1 and sqonpath.isblocking(checkdoors):
                     print("Can't get there from here")
                     dist = -1
                     break

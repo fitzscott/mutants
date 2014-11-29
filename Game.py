@@ -31,6 +31,8 @@ class Game():
         self.__mutantturn = True
 
     def getmutants(self, overridenum=0):
+        import mutants.FileChar
+
         # If the board comes pre-defined with mutants, don't add new ones.
         resmuties = self.__board.residentmutants()
         if len(resmuties) > 0:
@@ -40,10 +42,25 @@ class Game():
             nummutants = overridenum
         else:
             nummutants = mutants.Constants.Constants.MUTANTSPERWAVE[self.__wave - 1]
+
+        fc = mutants.FileChar.FileChar()
         self.__mutants = []
+        bats = pipes = shotguns = 0
         for i in range(nummutants):
-            self.__mutants.append(mutants.Mutant.Mutant())
-            self.__mutants[i].number = i
+            mutie = mutants.Mutant.Mutant()
+            mutie.number = i
+            # hand out goodies to the mutants
+            if random.randint(1, 6) + random.randint(1, 6) >= 11:       # some shotgun hunters
+                mutie.pickup(fc.getEquipment("*"))
+                shotguns +=1
+            elif random.randint(1, 6) + random.randint(1, 6) >= 10:       # some plumbers
+                mutie.pickup(fc.getEquipment("|"))
+                pipes += 1
+            elif random.randint(1, 6) + random.randint(1, 6) >= 9:       # lots of baseball players, apparently
+                mutie.pickup(fc.getEquipment("!"))
+                bats += 1
+            self.__mutants.append(mutie)
+        print("Handed out " + str(bats) + " bats, " + str(pipes) + " pipes, and " + str(shotguns) + " shotguns.")
 
     def placemutants(self):
         stagingarea = self.__board.emptyspace()
@@ -120,13 +137,12 @@ class Game():
         :return: boolean
         """
         ret = False
-        for i in range(len(self.__playerpieces)):
-            if self.__playerpieces[i].focus:
-                if dirct == None:
-                    ret = self.__playerpieces[i].movetosquare(sq)
-                else:
-                    ret = self.__playerpieces[i].moveindirection(dirct)
-                break
+        piece = self.piecewithfocus()
+        if piece != None:
+            if dirct == None:
+                ret = piece.movetosquare(sq)
+            else:
+                ret = piece.moveindirection(dirct)
         return(ret)
 
     def wavecomplete(self):

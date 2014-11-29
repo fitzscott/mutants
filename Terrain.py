@@ -30,12 +30,12 @@ class Terrain():
         self.__image = image
 
     def getmovethru(self):
-        return(self.__moveThru)
+        return(self.movethru())
 
     def setmovethru(self, boolval):
         self.__moveThru = boolval
 
-    def movethru(self, piece):
+    def movethru(self, piece=None):
         return (self.__moveThru)
 
 if __name__ == "__main__":

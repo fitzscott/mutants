@@ -12,13 +12,15 @@ class Robot(mutants.PlayerPiece.PlayerPiece):
     >>> print("Robot full name is " + r.fullname)
     Robot full name is RO1148
     """
-    def __init__(self):
+    def __init__(self, madefromscrap=False):
         super().__init__("Robot")
         self.__focus = False
         self.__number = random.randint(0, 8000) + 1000
         fc = mutants.FileChar.FileChar()
         rifle = fc.getEquipment(">")
-        self.pickup(rifle)
+        if not madefromscrap:
+            self.pickup(rifle)
+            self.wantpickup = False
 
     @property
     def fullname(self):

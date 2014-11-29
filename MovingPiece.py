@@ -27,6 +27,7 @@ class MovingPiece(Piece):
         self.__carried = None
         self.__lastsquare = None
         self.__hasattacked = False
+        self.__wantpickup = True
 
     def resetMovement(self):
         self.__moveRemaining = self.__movePts
@@ -73,7 +74,7 @@ class MovingPiece(Piece):
     def moveindirection(self, direction):
         #print("Moving " + self.name)
         if (self.__moveRemaining <= 0):
-            #print(self.name + " has no remaining movement points.")
+            self.message(self.name + " has no remaining movement points.")
             return (False)
 
         currsq = self.__lastsquare = self.getPosition()
@@ -155,16 +156,16 @@ class MovingPiece(Piece):
     def hthattack(self, sq):
         # Determine if the attack hits
         dieroll = random.randint(0, 5) + 1
+        if self.carried != None:
+            weapdescr = " with a " + self.carried.name
+        else:
+            weapdescr = ""
         if dieroll + self.handtohand > mutants.Constants.Constants.TOHIT:
-            self.message(self.fullname + " attacks " + sq.piece.fullname + " for " + \
+            self.message(self.fullname + " attacks " + sq.piece.fullname + weapdescr + " for " + \
                          str(self.handtohanddamage) + " damage.")
             sq.attackpiece(self.handtohanddamage)
         else:
-            if self.carried != None:
-                descrstr = " with a " + self.carried.name
-            else:
-                descrstr = " with no weapon"
-            self.message(self.fullname + " missed " + sq.piece.fullname + descrstr)
+            self.message(self.fullname + " missed " + sq.piece.fullname + weapdescr)
         return (True)
 
     def rngattack(self, sq, dist):
@@ -180,7 +181,11 @@ class MovingPiece(Piece):
                 if dieroll + self.ranged >= mutants.Constants.Constants.TOHIT:
                     # It's a hit!
                     damage = self.rangeddamage + rangepenalty
-                    self.message(self.fullname + " hit " + sq.piece.fullname + " for " \
+                    if self.carried != None:
+                        weapdescr = " with a " + self.carried.name + " "
+                    else:
+                        weapdescr = ""
+                    self.message(self.fullname + " hit " + sq.piece.fullname + weapdescr + " for " \
                                  + str(damage) + " damage!")
                     sq.attackpiece(damage)
                 else:
@@ -199,9 +204,9 @@ class MovingPiece(Piece):
         result = False
         if self.hasattacked:
             return (False)
-        dist = self.getPosition().distanceto(sq)
+        dist = self.getPosition().distanceto(sq, True, True)
         if dist == -1:
-            print(self.fullname + " cannot hit that target.")
+            self.message(self.fullname + " cannot hit that target.")
         else:
             if dist == 1:
                 self.hasattacked = self.hthattack(sq)
@@ -219,6 +224,14 @@ class MovingPiece(Piece):
     @property
     def carried(self):
         return(self.__carried)
+
+    @property
+    def wantpickup(self):
+        return (self.__wantpickup)
+
+    @wantpickup.setter
+    def wantpickup(self, pickitup):
+        self.__wantpickup = pickitup
 
 if __name__ == "__main__":
     import doctest

@@ -1,5 +1,6 @@
 __author__ = 'Fitz'
 
+import random
 import mutants.Terrain
 import mutants.MovingPiece
 
@@ -20,10 +21,22 @@ class Door(mutants.Terrain.Terrain):
         super().__init__("Door", "Door")
         self.__smashed = False
 
-    def movethru(self, piece):
-        if (self.__smashed):
+    def movethru(self, piece=None):
+        import mutants.Mutant
+
+        if (self.__smashed):            # not really a door any more
             return (True)
-        if (isinstance(piece, mutants.MovingPiece.MovingPiece)):
+        if (piece == None):
+            return (False)
+        if (isinstance(piece, mutants.Mutant.Mutant)):
+            retval = self.smash()
+            piece.decrRemaining(2)
+            if retval:
+                piece.message(piece.fullname + " smashes the door open")
+            else:
+                piece.message(piece.fullname + " fails to smash the door open")
+            return (retval)
+        elif (isinstance(piece, mutants.MovingPiece.MovingPiece)):
             piece.decrRemaining(1)
             return (True)
         else:
@@ -31,11 +44,17 @@ class Door(mutants.Terrain.Terrain):
 
     def smash(self):
         """
-        For now, we'll have smashing be automatic.  I think we'll only want it to be a
-        2 in 3 for mutants in the game, though.
+        We'll have smashing to be a
+        2 in 3 for mutants in the game.
         :return:
         """
-        self.__smashed = True
+        onedie = random.randint(1, 6)
+        if (onedie >= 3):
+            self.__smashed = True
+            self.image = "SmashedDoor"
+            return (True)
+        else:
+            return (False)
 
 if __name__ == "__main__":
     import doctest
