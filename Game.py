@@ -20,7 +20,7 @@ class Game():
     """
 
     def __init__(self, boardname=mutants.Constants.Constants.GAMEBOARD):
-        self.__wave = 0
+        self.__wave = 1
         self.__mutants = []
         self.__playerpieces = []
         #self.__humans = []
@@ -39,7 +39,7 @@ class Game():
         if overridenum:
             nummutants = overridenum
         else:
-            nummutants = mutants.Constants.Constants.MUTANTSPERWAVE[self.__wave]
+            nummutants = mutants.Constants.Constants.MUTANTSPERWAVE[self.__wave - 1]
         self.__mutants = []
         for i in range(nummutants):
             self.__mutants.append(mutants.Mutant.Mutant())
@@ -130,16 +130,26 @@ class Game():
         return(ret)
 
     def wavecomplete(self):
-        #return(len(self.__playerpieces) == 0 or len(self.__mutants) == 0)
-        return(len(self.__mutants) == 0)
+        return(len(self.__playerpieces) == 0 or len(self.__mutants) == 0)
+        #return(len(self.__mutants) == 0)
 
     def nextwave(self):
+        if self.__wave == len(mutants.Constants.Constants.MUTANTSPERWAVE):
+            self.__board.addmessage("")
+            if len(self.__playerpieces) == 0:
+                self.__board.addmessage("Game over!  The evil mutants have triumphed!")
+            else:
+                self.__board.addmessage("Game over!  You have prevailed over the mutants!")
+            self.__board.addmessage("")
+            return(False)
         self.__wave += 1
-        print("Wave " + str(self.__wave + 1) + "!")
+        self.__board.addmessage("")
+        self.__board.addmessage("        Wave " + str(self.__wave) + "!")
         self.__board.clearmutants()
         self.__mutants = []
         self.getmutants()
         self.placemutants()
+        return (True)
 
     def clearoutdeadpieces(self, pieces):
         i = len(pieces) - 1
@@ -156,6 +166,9 @@ class Game():
         for i in range(len(self.__playerpieces)):
             self.__playerpieces[i].resetMovement()
             self.__playerpieces[i].hasattacked = False
+        for i in range(len(self.__mutants)):
+            self.__mutants[i].resetMovement()
+            self.__mutants[i].hasattacked = False
 
 if __name__ == "__main__":
     import doctest

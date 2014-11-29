@@ -62,12 +62,12 @@ class MovingPiece(Piece):
                         self.message(self.synopsis() + " moving " + self.fullname + " to (" + \
                                      str(newsq.getXpos()) + ", " + str(newsq.getYpos()) + ")")
                     return (True)
-                else:
-                    print("Piece " + self.name + " cannot move to that square.")
-            else:
-                print("Insufficient remaining movement for " + self.fullname)
-        else:
-            print("Piece " + self.name + " cannot move off the board.")
+                #else:
+                #    print("Piece " + self.name + " cannot move to that square.")
+            #else:
+            #    print("Insufficient remaining movement for " + self.fullname)
+        #else:
+        #    print("Piece " + self.name + " cannot move off the board.")
         return (False)
 
     def moveindirection(self, direction):
@@ -82,7 +82,12 @@ class MovingPiece(Piece):
 
     def damage(self, amount):
         self.__hitPts -= amount
+        if self.__hitPts <= 0:
+            self.deathmessage()
         return(self.__hitPts <= 0)
+
+    def deathmessage(self):
+        self.message("    " + self.fullname + " is dead!")
 
     def alive(self):
         return(self.__hitPts > 0)
@@ -151,14 +156,15 @@ class MovingPiece(Piece):
         # Determine if the attack hits
         dieroll = random.randint(0, 5) + 1
         if dieroll + self.handtohand > mutants.Constants.Constants.TOHIT:
-            self.message(self.fullname + " attacks for " + str(self.handtohanddamage) + " damage.")
+            self.message(self.fullname + " attacks " + sq.piece.fullname + " for " + \
+                         str(self.handtohanddamage) + " damage.")
             sq.attackpiece(self.handtohanddamage)
         else:
             if self.carried != None:
                 descrstr = " with a " + self.carried.name
             else:
                 descrstr = " with no weapon"
-            self.message(self.fullname + " missed" + descrstr)
+            self.message(self.fullname + " missed " + sq.piece.fullname + descrstr)
         return (True)
 
     def rngattack(self, sq, dist):
@@ -174,10 +180,12 @@ class MovingPiece(Piece):
                 if dieroll + self.ranged >= mutants.Constants.Constants.TOHIT:
                     # It's a hit!
                     damage = self.rangeddamage + rangepenalty
+                    self.message(self.fullname + " hit " + sq.piece.fullname + " for " \
+                                 + str(damage) + " damage!")
                     sq.attackpiece(damage)
-                    self.message(self.fullname + " hit for " + str(damage) + " damage!")
                 else:
-                    self.message(self.fullname + " missed with the " + self.__carried.name)
+                    self.message(self.fullname + " missed "+ sq.piece.fullname + " with the " \
+                                 + self.__carried.name)
                 ret = True
             else:
                 self.message("That target is out of range.")

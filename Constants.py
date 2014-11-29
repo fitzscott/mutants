@@ -15,7 +15,8 @@ class Constants:
 
     IMAGESIDESIZE = 20
 
-    MUTANTSPERWAVE = [60, 80, 100]
+    #MUTANTSPERWAVE = [60, 80, 100]
+    MUTANTSPERWAVE = [10, 20, 30]
     MAXMUTANTEYESIGHT = 10
     MAXMUTANTSQUAREMEM = 30
 
@@ -25,11 +26,11 @@ class Constants:
 
     # attributes:  movement, hit points, hand-to-hand, ranged
     playerpieceattributes = {
-        "Bart":      (4, 12, 4, 4),
-        "Molly":     (6, 9, 2, 7),
+        "Bart":      (4, 12, 5, 4),
+        "Molly":     (6, 9, 3, 7),
         "Charlie":   (7, 7, 2, 4),
-        "Professor": (3, 7, 1, 4),
-        "Robot":     (3, 6, 2, 5)
+        "Professor": (3, 7, 1, 3),
+        "Robot":     (3, 4, 2, 2)
     }
 
     TOHIT = 8

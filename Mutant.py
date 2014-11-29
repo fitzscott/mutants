@@ -31,7 +31,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         mutants.Human.Human
     ]
 
-    def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=2, h2h=2):
+    def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=2, h2h=3):
         super().__init__(name, image, movePts, hitPts)
         self.handtohand = h2h
         self.__dir2go = 0
@@ -41,6 +41,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         self.__doorsExplored = []
         self.__squaresExplored = []
         self.__number = 0
+        self.ranged = 2
 
     @property
     def number(self):
@@ -186,13 +187,16 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             maxdist = self.carried.effectiverange
         else:
             maxdist = 1         # hand-to-hand only
-        for dirct in mutants.Constants.Constants.directions:
-            nsq = self.getPosition().getNeighbor(dirct)
-            goodsq = self.evaluatesquare(nsq, dirct)
-            if goodsq != None and self.MUTANTINTEREST.index(type(goodsq.showing)) > 3:
-                self.message(self.fullname + " is attacking " + goodsq.showing.fullname)
-                self.attack(goodsq)
-                break       # only get to attack once
+        currdist = 1
+        while currdist <= maxdist:
+            for dirct in mutants.Constants.Constants.directions:
+                goodsq = self.evaluatesquare(self.getPosition(), dirct, currdist)
+                if goodsq != None and self.MUTANTINTEREST.index(type(goodsq.showing)) > 3:
+                    self.message(self.fullname + " is attacking " + goodsq.showing.fullname)
+                    self.attack(goodsq)
+                    currdist = maxdist      # make sure we exit the outer loop
+                    break       # only get to attack once
+            currdist += 1
 
 if __name__ == "__main__":
     import doctest

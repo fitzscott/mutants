@@ -32,4 +32,7 @@ class Robot(mutants.PlayerPiece.PlayerPiece):
     def number(self, num):
         self.__number = num
 
+    def deathmessage(self):
+        self.message("    " + self.fullname + " has been destroyed!")
+
 

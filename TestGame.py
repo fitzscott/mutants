@@ -110,7 +110,7 @@ class TestGame(unittest.TestCase):
 
     def testBadMove(self):
         g = mutants.Game.Game("testboardA")
-        g.getmutants(5)
+        g.getmutants(2)
         g.placemutants()
         for i in range(3):
             g.placerobot(mutants.Robot.Robot())
@@ -128,4 +128,18 @@ class TestGame(unittest.TestCase):
         g = mutants.Game.Game("testboardA")
         g.getmutants(2)
         g.placemutants()
+        g.play(500000)
+
+    def testMutantDirectionsYetAgain(self):
+        g = mutants.Game.Game("testboard5")
+        g.getmutants()
+        g.placemutants()
+        bart = mutants.Human.Human("Bart")
+        g.placehuman(bart)
+        molly = mutants.Human.Human("Molly")
+        g.placehuman(molly)
+        charlie = mutants.Human.Human("Charlie")
+        g.placehuman(charlie)
+        for i in range(mutants.Constants.Constants.NUMROBOTS):
+            g.placerobot(mutants.Robot.Robot())
         g.play(500000)

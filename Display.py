@@ -66,6 +66,9 @@ class Display():
         self.__messageheight = msgdisp.get_size()[1] + 1
         maxmessages = (mutants.Constants.Constants.WINSIZE[1] - self.bottomofboard()) / self.__messageheight - 1
         self.__board.maxmessages = maxmessages
+        buttonfont = pygame.font.SysFont("Courier", 24)
+        self.__nextbuttonmsg = buttonfont.render(" Next Turn ", 1, (255, 255, 255), (0, 127, 0))
+        self.__nextbuttonsize = self.__nextbuttonmsg.get_size()
 
     def message(self):
         y = self.bottomofboard() + 1
@@ -74,6 +77,7 @@ class Display():
             msgdisp = self.__font.render(msglist[i], 1, (63, 0, 63), self.__bgcolor)
             self.__screen.blit(msgdisp, (5, y))
             y += self.__messageheight
+        self.__screen.blit(self.__nextbuttonmsg, (797 - self.__nextbuttonsize[0], self.bottomofboard() + 3))
 
     def addmessage(self, msg):
         self.__board.addmessage(msg)
@@ -121,6 +125,7 @@ class Display():
 
     def runLoop(self, maxtix=10000000):
         i = 0
+        gamecontinues = True
         drawwhiterect = False
         while (i < maxtix):
             self.__clock.tick(40)
@@ -137,19 +142,25 @@ class Display():
                     if (sq != None):
                         if (sq.isOccupied()):
                             #if pygame.mouse.get_pressed()[0]:
+                            occupant = sq.piece
                             if event.button == 1:       # left click
-                                occupant = sq.piece
                                 #print("Left click on " + occupant.fullname)
                                 if issubclass(type(occupant), mutants.PlayerPiece.PlayerPiece):
                                     self.__game.clearfoci()
                                     occupant.focus = True
                                     #print(occupant.name + " has focus at (" + str(col) + ", " + str(row) + ").")
+                                else:
+                                    self.__board.addmessage(occupant.synopsis())
+                                    self.__game.clearfoci()
                             #elif pygame.mouse.get_pressed()[2]:    # right-click?
                             elif event.button == 3:     # right click
                                 activepiece = self.__game.piecewithfocus()
                                 if activepiece != None:
                                     #print("Right click from " + activepiece.fullname + " on " + sq.showing.fullname)
                                     activepiece.attack(sq)
+                        elif sq.hasequipment():
+                            self.__board.addmessage("That is a " + sq.getequipment().name)
+                            self.__game.clearfoci()
                     else:
                         self.__game.mutantturn = True
                         self.__game.nextturn()
@@ -171,17 +182,13 @@ class Display():
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        if not self.__game.movepiecewithfocus(None, mutants.Constants.Constants.UP):
-                            self.addmessage("Cannot move " + self.__game.piecewithfocus().name + " upward.")
+                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.UP)
                     if event.key == pygame.K_DOWN:
-                        if not self.__game.movepiecewithfocus(None, mutants.Constants.Constants.DOWN):
-                            self.addmessage("Cannot move " + self.__game.piecewithfocus().name + " downward.")
+                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.DOWN)
                     if event.key == pygame.K_LEFT:
-                        if not self.__game.movepiecewithfocus(None, mutants.Constants.Constants.LEFT):
-                            self.addmessage("Cannot move " + self.__game.piecewithfocus().name + " left.")
+                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.LEFT)
                     if event.key == pygame.K_RIGHT:
-                        if not self.__game.movepiecewithfocus(None, mutants.Constants.Constants.RIGHT):
-                            self.addmessage("Cannot move " + self.__game.piecewithfocus().name + " right.")
+                        self.__game.movepiecewithfocus(None, mutants.Constants.Constants.RIGHT)
 
             self.drawboard(drawwhiterect)
             self.message()
@@ -193,9 +200,10 @@ class Display():
                     self.__game.mutantturn = False
             self.__game.clearoutdead()
             if self.__game.wavecomplete():
-                self.__game.nextwave()
+                gamecontinues = self.__game.nextwave()
 
-            i += 1
+            if gamecontinues:
+                i += 1
 
     def bottomofboard(self):
         return (self.__board.height * mutants.Constants.Constants.IMAGESIDESIZE)
