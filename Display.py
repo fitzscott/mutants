@@ -54,12 +54,17 @@ class Display():
         self.loadImage(cwd, "Pistol")
         self.loadImage(cwd, "Rifle")
         self.loadImage(cwd, "Shotgun")
+        self.loadImage(cwd, "Chainsaw")
         self.loadImage(cwd, "SpareParts")
         self.loadImage(cwd, "Molly")
         self.loadImage(cwd, "Bart")
         self.loadImage(cwd, "Charlie")
         self.loadImage(cwd, "Robot")
-        self.loadImage(cwd, "Mutant2")
+        for i in range(9):
+            self.loadImage(cwd, "Mutant0" + str(i+1))
+            self.loadImage(cwd, "LeaderMutant0" + str(i+1))
+            self.loadImage(cwd, "RadioactiveMutant0" + str(i+1))
+        self.loadImage(cwd, "Professor")
         self.loadBoard(boardname)
         self.__font = pygame.font.SysFont("Courier", 12)
         msgdisp = self.__font.render("Attack of the Mutants!", 1, (63, 0, 63), self.__bgcolor)
@@ -184,10 +189,10 @@ class Display():
                     piece = self.__game.piecewithfocus()
                     if piece != None:
                         pickup = not (pygame.key.get_mods() & KMOD_SHIFT)
-                        if pickup:
-                            print(piece.fullname + " is in pick-up mode")
-                        else:
-                            print(piece.fullname + " does not want to pick stuff up")
+                        #if pickup:
+                        #    print(piece.fullname + " is in pick-up mode")
+                        #else:
+                        #    print(piece.fullname + " does not want to pick stuff up")
                         piece.wantpickup = pickup
                         if event.key == pygame.K_UP:
                             piece.moveindirection(mutants.Constants.Constants.UP)
@@ -197,22 +202,16 @@ class Display():
                             piece.moveindirection(mutants.Constants.Constants.LEFT)
                         if event.key == pygame.K_RIGHT:
                             piece.moveindirection(mutants.Constants.Constants.RIGHT)
-                    #if event.key == pygame.K_UP:
-                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.UP)
-                    #if event.key == pygame.K_DOWN:
-                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.DOWN)
-                    #if event.key == pygame.K_LEFT:
-                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.LEFT)
-                    #if event.key == pygame.K_RIGHT:
-                    #    self.__game.movepiecewithfocus(None, mutants.Constants.Constants.RIGHT)
+                        if event.key == pygame.K_s:
+                            piece.special()
 
             self.drawboard(drawwhiterect)
             self.message()
             pygame.display.update()
             if i % 40 == 39:
                 if self.__game.mutantturn:
-                    self.__game.movemutants()
-                    self.__game.mutantattack()
+                    self.__game.board.movemutants()
+                    self.__game.board.mutantattack()
                     self.__game.mutantturn = False
             self.__game.clearoutdead()
             if self.__game.wavecomplete():

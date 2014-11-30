@@ -2,15 +2,16 @@ __author__ = 'Fitz'
 
 import random
 
+import mutants.Constants
 import mutants.MovingPiece
 import mutants.ExteriorSpace
 import mutants.Space
 import mutants.Door
+import mutants.Wall
 import mutants.Equipment
 import mutants.Robot
 import mutants.Human
-import mutants.Wall
-import mutants.Constants
+import mutants.Professor
 
 class Mutant(mutants.MovingPiece.MovingPiece):
     """
@@ -28,10 +29,12 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         mutants.Door.Door,
         mutants.Equipment.Equipment,
         mutants.Robot.Robot,
-        mutants.Human.Human
+        mutants.Human.Human,
+        mutants.Professor.Professor
     ]
 
-    def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=2, h2h=3):
+    def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=3, h2h=3):
+        image = name + "0" + str(random.randint(1,9))
         super().__init__(name, image, movePts, hitPts)
         self.handtohand = h2h
         self.__dir2go = 0
@@ -75,6 +78,8 @@ class Mutant(mutants.MovingPiece.MovingPiece):
     def checkDirection(self, sq, dirct, dist, seenGood, seenOk, diridx):
         nsq = self.evaluatesquare(sq, dirct, dist)
         if nsq == None:
+            return (False)
+        if type(nsq.showing) not in self.MUTANTINTEREST:
             return (False)
         idx = self.MUTANTINTEREST.index(type(nsq.showing))
         if idx > seenOk[diridx]:
@@ -192,12 +197,22 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         while currdist <= maxdist:
             for dirct in mutants.Constants.Constants.directions:
                 goodsq = self.evaluatesquare(self.getPosition(), dirct, currdist)
-                if goodsq != None and self.MUTANTINTEREST.index(type(goodsq.showing)) > 3:
+                if goodsq != None and type(goodsq.showing) in self.MUTANTINTEREST \
+                        and self.MUTANTINTEREST.index(type(goodsq.showing)) > 3:
                     self.message(self.fullname + " is attacking " + goodsq.showing.fullname)
                     self.attack(goodsq)
                     currdist = maxdist      # make sure we exit the outer loop
                     break       # only get to attack once
             currdist += 1
+
+    @property
+    def wantpickup(self):
+        retval = True
+        if self.carried != None:
+            weapon = self.carried.name
+            if weapon == "Axe" or weapon == "Shotgun":
+                retval = False
+        return (retval)
 
 if __name__ == "__main__":
     import doctest

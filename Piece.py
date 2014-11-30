@@ -51,7 +51,7 @@ class Piece:
     def square(self):
         #print("Returning square for " + self.name)
         if self.__square == None:
-            print("Square is None, though (?)")
+            print(self.fullname + "'s square is None... why?")
         return(self.__square)
 
 if __name__ == "__main__":

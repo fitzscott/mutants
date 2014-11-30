@@ -42,10 +42,18 @@ class MovingPiece(Piece):
     def decrRemaining(self, howmany=1):
         self.__moveRemaining -= howmany
 
+    @property
+    def lastsquare(self):
+        return(self.__lastsquare)
+
     def message(self, msg):
-        self.getPosition().sendmessage(msg)
+        sq = self.getPosition()
+        if sq != None:
+            sq.sendmessage(msg)
 
     def movetosquare(self, newsq, currsq=None):
+        import mutants.Mutant
+
         if currsq == None:
             currsq = self.__lastsquare = self.getPosition()
         if newsq == currsq:
@@ -59,7 +67,7 @@ class MovingPiece(Piece):
                 if (self.setPosition(newsq)):
                     currsq.removePiece()
                     self.decrRemaining(dist)
-                    if self.name != "Mutant":
+                    if not isinstance(self, mutants.Mutant.Mutant):
                         self.message(self.synopsis() + " moving " + self.fullname + " to (" + \
                                      str(newsq.getXpos()) + ", " + str(newsq.getYpos()) + ")")
                     return (True)
@@ -74,7 +82,7 @@ class MovingPiece(Piece):
     def moveindirection(self, direction):
         #print("Moving " + self.name)
         if (self.__moveRemaining <= 0):
-            self.message(self.name + " has no remaining movement points.")
+            #self.message(self.name + " has no remaining movement points.")
             return (False)
 
         currsq = self.__lastsquare = self.getPosition()
@@ -224,6 +232,10 @@ class MovingPiece(Piece):
     @property
     def carried(self):
         return(self.__carried)
+
+    @carried.setter
+    def carried(self, whattocarry):
+        self.__carried = whattocarry
 
     @property
     def wantpickup(self):

@@ -136,6 +136,10 @@ class Square():
     def sendmessage(self, msg):
         self.__board.addmessage(msg)
 
+    @property
+    def board(self):
+        return (self.__board)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

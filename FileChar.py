@@ -52,7 +52,8 @@ class FileChar():
             "*": ("Shotgun",      2, 2, 4, 9, 4, 0),
             "!": ("Bat",          4, 3, 0, 0, 0, 0),
             "|": ("Pipe",         4, 4, 0, 0, 0, 0),
-            "^": ("SpareParts",   0, 0, 0, 0, 0, 0)
+            "^": ("SpareParts",   0, 0, 0, 0, 0, 0),
+            ";": ("Chainsaw",     2, 8, 0, 0, 0, 0)
         }
 
     def getTerrain(self, boardchar):
