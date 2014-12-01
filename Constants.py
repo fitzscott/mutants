@@ -31,7 +31,8 @@ class Constants:
         "Molly":     (6, 9, 3, 7),
         "Charlie":   (7, 7, 2, 4),
         "Professor": (3, 7, 1, 3),
-        "Robot":     (3, 4, 2, 2)
+        "Robot":     (3, 4, 2, 2),
+        "Computer":  (0, 7, 0, 0)
     }
 
     TOHIT = 8

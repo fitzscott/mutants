@@ -73,12 +73,20 @@ class Game():
 
     def nextwave(self):
         if self.__wave == len(mutants.Constants.Constants.MUTANTSPERWAVE):
-            self.__board.addmessage("")
+            #self.__board.addmessage("")
             if self.board.playerpiececount() == 0:
                 self.__board.addmessage("Game over!  The evil mutants have triumphed!")
             else:
-                self.__board.addmessage("Game over!  You have prevailed over the mutants!")
-            self.__board.addmessage("")
+                humansleft = self.board.humanpiececount()
+                if humansleft > 3:
+                    self.__board.addmessage("Game over!  Decisive human victory over the mutants!")
+                elif humansleft > 1:
+                    self.__board.addmessage("Game over!  Marginal human victory over the mutants!")
+                elif humansleft == 1:
+                    self.__board.addmessage("Game over!  It's a draw!")
+                else:
+                    self.__board.addmessage("Game over!  Marginal victory for the mutants!")
+            #self.__board.addmessage("")
             return(False)
         self.__wave += 1
         self.__board.addmessage("")

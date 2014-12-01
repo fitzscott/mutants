@@ -172,3 +172,17 @@ class TestGame(unittest.TestCase):
         charlie = mutants.Human.Human("Charlie")
         g.board.placehuman(charlie)
         g.play(500000)
+
+    def testComputer(self):
+        g = mutants.Game.Game("testboardB")
+        g.board.getmutants(1)
+        g.board.placemutants()
+        bart = mutants.Human.Human("Bart")
+        g.board.placehuman(bart)
+        molly = mutants.Human.Human("Molly")
+        g.board.placehuman(molly)
+        charlie = mutants.Human.Human("Charlie")
+        g.board.placehuman(charlie)
+        for i in range(mutants.Constants.Constants.NUMROBOTS):
+            g.board.placerobot(mutants.Robot.Robot())
+        g.play(500000)

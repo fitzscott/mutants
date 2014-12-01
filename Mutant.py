@@ -12,6 +12,7 @@ import mutants.Equipment
 import mutants.Robot
 import mutants.Human
 import mutants.Professor
+import mutants.Computer
 
 class Mutant(mutants.MovingPiece.MovingPiece):
     """
@@ -20,18 +21,6 @@ class Mutant(mutants.MovingPiece.MovingPiece):
     >>> print(m.MUTANTINTEREST[4])
     <class 'mutants.Equipment.Equipment'>
     """
-
-    # hierarchy of things of interest to mutants
-    MUTANTINTEREST = [
-        #mutants.Wall.Wall,
-        mutants.ExteriorSpace.ExteriorSpace,
-        mutants.Space.Space,
-        mutants.Door.Door,
-        mutants.Equipment.Equipment,
-        mutants.Robot.Robot,
-        mutants.Human.Human,
-        mutants.Professor.Professor
-    ]
 
     def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=3, h2h=3):
         image = name + "0" + str(random.randint(1,9))
@@ -45,6 +34,19 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         self.__squaresExplored = []
         self.__number = 0
         self.ranged = 2
+
+    # hierarchy of things of interest to mutants
+    MUTANTINTEREST = [
+        #mutants.Wall.Wall,
+        mutants.ExteriorSpace.ExteriorSpace,
+        mutants.Space.Space,
+        mutants.Door.Door,
+        mutants.Equipment.Equipment,
+        mutants.Robot.Robot,
+        mutants.Computer.Computer,
+        mutants.Human.Human,
+        mutants.Professor.Professor
+    ]
 
     @property
     def number(self):

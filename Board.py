@@ -8,6 +8,8 @@ import mutants.Constants
 import mutants.Mutant
 import mutants.RadioactiveMutant
 import mutants.LeaderMutant
+import mutants.Human
+import mutants.Robot
 
 class Board():
     """
@@ -291,8 +293,21 @@ class Board():
     def playerpiececount(self):
         return(len(self.__playerpieces))
 
+    def humanpiececount(self):
+        cnt = 0
+        for piece in self.__playerpieces:
+            if isinstance(piece, mutants.Human):
+                cnt += 1
+        return (cnt)
+
     def mutantpiececount(self):
         return(len(self.__mutants))
+
+    def cripplerobots(self):
+        for piece in self.__playerpieces:
+            if isinstance(piece, mutants.Robot.Robot):
+                piece.decrRemaining(piece.getRemainingMovement())
+                piece.movement = -1
 
 if __name__ == "__main__":
     import doctest

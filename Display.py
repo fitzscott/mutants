@@ -60,6 +60,7 @@ class Display():
         self.loadImage(cwd, "Bart")
         self.loadImage(cwd, "Charlie")
         self.loadImage(cwd, "Robot")
+        self.loadImage(cwd, "Computer")
         for i in range(9):
             self.loadImage(cwd, "Mutant0" + str(i+1))
             self.loadImage(cwd, "LeaderMutant0" + str(i+1))

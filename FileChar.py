@@ -6,6 +6,7 @@ import mutants.Door
 import mutants.ExteriorSpace
 import mutants.Equipment
 import mutants.Mutant
+import mutants.Computer
 
 class FileChar():
     """
@@ -77,11 +78,13 @@ class FileChar():
             equip = mutants.Equipment.Equipment(nm, nm, hth_hit, hth_dam, rng_hit, rng_dam, rng, heal)
         return(equip)
 
-    def getMutant(self, boardchar):
-        m = None
+    def getPiece(self, boardchar):
+        p = None
         if boardchar == "M":
-            m = mutants.Mutant.Mutant()
-        return (m)
+            p = mutants.Mutant.Mutant()
+        elif boardchar == "C":
+            p = mutants.Computer.Computer()
+        return (p)
 
 if __name__ == "__main__":
     import doctest

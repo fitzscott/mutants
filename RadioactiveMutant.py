@@ -17,6 +17,10 @@ class RadioactiveMutant(mutants.Mutant.Mutant):
         1 in 12 chance the mutant will explode in a radioactive spray.
         :return:
         """
+        # I don't know why this happens - bug
+        if self.square == None:
+            print(self.fullname + " has no square - bailing out.")
+            return
         if random.randint(1,6) + random.randint(1,6) >= 11:
             self.message(self.fullname + " glows with radioactivity & vaporizes itself (and maybe others)")
             # simulate the gamma rays by boosting hand-to-hand & attacking

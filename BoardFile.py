@@ -68,15 +68,19 @@ class BoardFile():
             for colnum in range(len(self.__boardlines[linenum]) - 1):  #  skip CRLF
                 sq = board.addSquare(colnum, linenum)
                 equip = fc.getEquipment(self.__boardlines[linenum][colnum])
-                mutie = fc.getMutant(self.__boardlines[linenum][colnum])
+                piece = fc.getPiece(self.__boardlines[linenum][colnum])
                 if (equip != None):
                     # equipment can only reside in clear terrain
                     terr = fc.getTerrain(" ")
                     sq.addequipment(equip)
-                elif (mutie != None):
-                    # mutant can only reside in clear terrain (for these purposes, at least)
+                elif (piece != None):
+                    # Mutant can only reside in clear terrain (for these purposes, at least).
+                    # Computer is largely the same.
                     terr = fc.getTerrain(" ")
-                    mutie.setPosition(sq)
+                    if piece.name == "Computer":
+                        sq.board.placerobot(piece, sq)      # treat the computer like a non-moving robot.
+                    else:
+                        sq.board.placemutant(piece, sq)
                 else:
                     terr = fc.getTerrain(self.__boardlines[linenum][colnum])
                 sq.setTerrain(terr)

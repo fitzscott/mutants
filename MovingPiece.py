@@ -35,6 +35,14 @@ class MovingPiece(Piece):
     def getRemainingMovement(self):
         return (self.__moveRemaining)
 
+    @property
+    def movement(self):
+        return(self.__movePts)
+
+    @movement.setter
+    def movement(self, mvpts):
+        self.__movePts = mvpts
+
     def canmove(self):
         #print("In canmove for " + self.fullname + " w/ move remaining: " + str(self.__moveRemaining))
         return (self.__moveRemaining > 0)
