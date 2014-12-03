@@ -15,3 +15,9 @@ class Human(mutants.PlayerPiece.PlayerPiece):
         super().__init__(name)
         self.__focus = False
 
+    def healthyself(self):
+        if self.carried != None and self.carried.name == "FirstAid":
+            self.heal(self.carried.heals)
+            self.carried = None
+        else:
+            self.message(self.fullname + " needs a first aid kit to heal.")

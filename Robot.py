@@ -37,4 +37,10 @@ class Robot(mutants.PlayerPiece.PlayerPiece):
     def deathmessage(self):
         self.message("    " + self.fullname + " has been destroyed!")
 
+    def healthyself(self):
+        if self.carried != None and self.carried.name == "SpareParts":
+            self.heal(self.carried.heals)
+            self.carried = None
+        else:
+            self.message(self.fullname + " needs spare parts to repair itself.")
 

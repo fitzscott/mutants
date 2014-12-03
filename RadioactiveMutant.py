@@ -12,7 +12,7 @@ class RadioactiveMutant(mutants.Mutant.Mutant):
     def __init__(self):
         super().__init__("RadioactiveMutant", "RadioactiveMutant", 4, 4, 3)
 
-    def glowngo(self):
+    def glowngo(self, mintogo=11):
         """
         1 in 12 chance the mutant will explode in a radioactive spray.
         :return:
@@ -21,7 +21,7 @@ class RadioactiveMutant(mutants.Mutant.Mutant):
         if self.square == None:
             print(self.fullname + " has no square - bailing out.")
             return
-        if random.randint(1,6) + random.randint(1,6) >= 11:
+        if random.randint(1,6) + random.randint(1,6) >= mintogo:
             self.message(self.fullname + " glows with radioactivity & vaporizes itself (and maybe others)")
             # simulate the gamma rays by boosting hand-to-hand & attacking
             self.handtohand += random.randint(1, 6)

@@ -65,6 +65,7 @@ class Display():
             self.loadImage(cwd, "Mutant0" + str(i+1))
             self.loadImage(cwd, "LeaderMutant0" + str(i+1))
             self.loadImage(cwd, "RadioactiveMutant0" + str(i+1))
+            self.loadImage(cwd, "HyperRadioactiveMutant0" + str(i+1))
         self.loadImage(cwd, "Professor")
         self.loadBoard(boardname)
         self.__font = pygame.font.SysFont("Courier", 12)
@@ -205,18 +206,21 @@ class Display():
                             piece.moveindirection(mutants.Constants.Constants.RIGHT)
                         if event.key == pygame.K_s:
                             piece.special()
+                        if event.key == pygame.K_h:
+                            piece.healthyself()
 
             self.drawboard(drawwhiterect)
             self.message()
             pygame.display.update()
             if i % 40 == 39:
+                i += 1
                 if self.__game.mutantturn:
+                    self.__game.mutantturn = False
                     self.__game.board.movemutants()
                     self.__game.board.mutantattack()
-                    self.__game.mutantturn = False
-            self.__game.clearoutdead()
-            if self.__game.wavecomplete():
-                gamecontinues = self.__game.nextwave()
+                self.__game.clearoutdead()
+                if self.__game.wavecomplete():
+                    gamecontinues = self.__game.nextwave()
 
             if gamecontinues:
                 i += 1

@@ -24,7 +24,7 @@ class Game():
         self.__display = mutants.Display.Display(self)
         self.__display.loadResources(boardname)
         self.__board = self.__display.board
-        self.__mutantturn = True
+        self.__mutantturn = False
 
     def play(self, maxloops=10000000):
         self.__display.runLoop(maxloops)

@@ -43,3 +43,6 @@ class PlayerPiece(mutants.MovingPiece.MovingPiece):
         """
         return(False)
 
+    def healthyself(self):
+        pass
+

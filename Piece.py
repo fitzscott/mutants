@@ -21,6 +21,10 @@ class Piece:
     def name(self):
         return(self.__name)
 
+    @name.setter
+    def name(self, nm):
+        self.__name = nm
+
     @property
     def fullname(self):
         return(self.__name)
@@ -28,6 +32,10 @@ class Piece:
     @property
     def image(self):
         return (self.__image)
+
+    @image.setter
+    def image(self, img):
+        self.__image = img
 
     def getPosition(self):
         return(self.__square)

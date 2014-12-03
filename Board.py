@@ -38,6 +38,8 @@ class Board():
         self.__maxmessages = 1
         self.__mutants = []
         self.__playerpieces = []
+        self.__hypth = 10
+        self.__hypcntdn = 4
 
     @property
     def width(self):
@@ -289,6 +291,15 @@ class Board():
         for i in range(len(self.__mutants)):
             self.__mutants[i].resetMovement()
             self.__mutants[i].hasattacked = False
+        if len(self.__mutants) <= self.__hypth:
+            print("In hyper-threshhold: " + str(self.__hypth) + ", countdown at " + str(self.__hypcntdn))
+            self.__hypcntdn -= 1
+            if self.__hypcntdn <= 0:
+                self.addmessage("****  Mutants have gone hyper-radioactive!  *****")
+                self.hypermutants()
+                self.__hypcntdn = 4     # reset for next time
+            else:
+                self.addmessage("*****  Mutants will be going hyper-radioactive soon!  *****")
 
     def playerpiececount(self):
         return(len(self.__playerpieces))
@@ -296,7 +307,7 @@ class Board():
     def humanpiececount(self):
         cnt = 0
         for piece in self.__playerpieces:
-            if isinstance(piece, mutants.Human):
+            if isinstance(piece, mutants.Human.Human):
                 cnt += 1
         return (cnt)
 
@@ -308,6 +319,26 @@ class Board():
             if isinstance(piece, mutants.Robot.Robot):
                 piece.decrRemaining(piece.getRemainingMovement())
                 piece.movement = -1
+
+    def hypermutants(self):
+        import mutants.HyperRadioactiveMutant
+
+        for mutidx in range(len(self.__mutants)):
+            hypmutie = mutants.HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx])
+            sq = self.__mutants[mutidx].square
+            sq.removePiece()
+            hypmutie.setPosition(sq)
+            self.__mutants[mutidx] = hypmutie
+
+    @property
+    def hyperthreshhold(self):
+        return (self.__hypth)
+
+    @hyperthreshhold.setter
+    def hyperthreshhold(self, hypth):
+        self.__hypth = hypth
+
+
 
 if __name__ == "__main__":
     import doctest
