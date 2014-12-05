@@ -78,7 +78,7 @@ class Game():
                 self.__board.addmessage("Game over!  The evil mutants have triumphed!")
             else:
                 humansleft = self.board.humanpiececount()
-                if humansleft > 3:
+                if humansleft >= 3:
                     self.__board.addmessage("Game over!  Decisive human victory over the mutants!")
                 elif humansleft > 1:
                     self.__board.addmessage("Game over!  Marginal human victory over the mutants!")
@@ -101,7 +101,7 @@ class Game():
         self.board.clearoutdead()
 
     def nextturn(self):
-        self.board.resetpieces()
+        self.board.resetpieces(self.__wave)
 
 if __name__ == "__main__":
     import doctest

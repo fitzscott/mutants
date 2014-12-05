@@ -57,8 +57,9 @@ class Display():
         self.loadImage(cwd, "Chainsaw")
         self.loadImage(cwd, "SpareParts")
         self.loadImage(cwd, "Molly")
-        self.loadImage(cwd, "Bart")
+        self.loadImage(cwd, "Buck")
         self.loadImage(cwd, "Charlie")
+        self.loadImage(cwd, "Jeb")
         self.loadImage(cwd, "Robot")
         self.loadImage(cwd, "Computer")
         for i in range(9):
@@ -104,10 +105,10 @@ class Display():
                     occupant = sq.piece
                     if issubclass(type(occupant), mutants.PlayerPiece.PlayerPiece):
                         if occupant.canmove() and not occupant.hasattacked:
-                            boxcolor = (255, 255, 0)
+                            boxcolor = (255, 0, 255)
                         elif occupant.canmove():
                             # indicate to the player that the piece can still move
-                            boxcolor = (0, 255, 0)
+                            boxcolor = (0, 0, 255)
                         elif not occupant.hasattacked:
                             # indicate to the player that the piece can still attack
                             boxcolor = (255, 0, 0)

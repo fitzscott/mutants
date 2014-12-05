@@ -14,8 +14,16 @@ class Computer(mutants.PlayerPiece.PlayerPiece):
 
     def deathmessage(self):
         self.message("    " + self.fullname + " has been destroyed!")
-        self.message("Without " + self.fullname + " control, robots may not move.")
+        self.message("Without " + self.fullname + " control, existing robots may not move.")
         self.square.board.cripplerobots()
+
+    @property
+    def hasattacked(self):
+        return(True)
+
+    @hasattacked.setter
+    def hasattacked(self, att):
+        pass    # The computer never attacks, so this is irrelevant.  Still need to define it, though.
 
 if __name__ == "__main__":
     import doctest

@@ -284,19 +284,19 @@ class Board():
                 return (self.__playerpieces[i])
         return (None)
 
-    def resetpieces(self):
+    def resetpieces(self, wave):
         for i in range(len(self.__playerpieces)):
             self.__playerpieces[i].resetMovement()
             self.__playerpieces[i].hasattacked = False
         for i in range(len(self.__mutants)):
             self.__mutants[i].resetMovement()
             self.__mutants[i].hasattacked = False
-        if len(self.__mutants) <= self.__hypth:
+        if len(self.__mutants) <= self.__hypth + random.randint(wave, 10):
             print("In hyper-threshhold: " + str(self.__hypth) + ", countdown at " + str(self.__hypcntdn))
             self.__hypcntdn -= 1
             if self.__hypcntdn <= 0:
                 self.addmessage("****  Mutants have gone hyper-radioactive!  *****")
-                self.hypermutants()
+                self.hypermutants(wave)
                 self.__hypcntdn = 4     # reset for next time
             else:
                 self.addmessage("*****  Mutants will be going hyper-radioactive soon!  *****")
@@ -320,11 +320,16 @@ class Board():
                 piece.decrRemaining(piece.getRemainingMovement())
                 piece.movement = -1
 
-    def hypermutants(self):
+    def hypermutants(self, wave):
         import mutants.HyperRadioactiveMutant
 
+        if wave == 3:
+            glomin = 10
+        else:
+            glomin = 7
+
         for mutidx in range(len(self.__mutants)):
-            hypmutie = mutants.HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx])
+            hypmutie = mutants.HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx], glomin)
             sq = self.__mutants[mutidx].square
             sq.removePiece()
             hypmutie.setPosition(sq)

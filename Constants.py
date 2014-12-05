@@ -27,9 +27,10 @@ class Constants:
 
     # attributes:  movement, hit points, hand-to-hand, ranged
     playerpieceattributes = {
-        "Bart":      (4, 12, 5, 4),
+        "Buck":      (4, 12, 5, 4),
         "Molly":     (6, 9, 3, 7),
         "Charlie":   (7, 7, 2, 4),
+        "Jeb":       (5, 10, 4, 4),
         "Professor": (3, 7, 1, 3),
         "Robot":     (3, 4, 2, 2),
         "Computer":  (0, 7, 0, 0)
