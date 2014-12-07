@@ -62,6 +62,8 @@ class Display():
         self.loadImage(cwd, "Jeb")
         self.loadImage(cwd, "Robot")
         self.loadImage(cwd, "Computer")
+        self.loadImage(cwd, "Tombstone")
+        self.loadImage(cwd, "Debris")
         for i in range(9):
             self.loadImage(cwd, "Mutant0" + str(i+1))
             self.loadImage(cwd, "LeaderMutant0" + str(i+1))
@@ -96,7 +98,10 @@ class Display():
                 #print("Row is " + str(row) + ", col is " + str(col))
                 sq = self.__board.getSquare(col, row)
                 toshow = sq.showing
-                img = self.__images[toshow.image]
+                if toshow.image in self.__images:
+                    img = self.__images[toshow.image]
+                else:
+                    print("Tried showing " + toshow.name + ", but couldn't.")
                 sidesize = mutants.Constants.Constants.IMAGESIDESIZE
                 x = col * sidesize
                 y = row * sidesize
@@ -166,11 +171,15 @@ class Display():
                                 if activepiece != None:
                                     #print("Right click from " + activepiece.fullname + " on " + sq.showing.fullname)
                                     activepiece.attack(sq)
+                        elif sq.hasindicator():
+                            self.__board.addmessage("That is a " + sq.indicator.name)
+                            self.__game.clearfoci()
                         elif sq.hasequipment():
                             self.__board.addmessage("That is a " + sq.getequipment().name)
                             self.__game.clearfoci()
                     else:
                         self.__game.mutantturn = True
+                        #gamecontinues = self.__game.nextturn()
                         self.__game.nextturn()
 
                 if event.type == pygame.MOUSEBUTTONUP:

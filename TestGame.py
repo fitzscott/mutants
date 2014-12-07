@@ -270,3 +270,45 @@ class TestGame(unittest.TestCase):
             g.board.placerobot(mutants.Robot.Robot())
         g.play(500000)
 
+    def testBoardE(self):
+        g = mutants.Game.Game("testboardE")
+        g.board.getmutants(1)
+        g.board.placemutants()
+        buck = mutants.Human.Human("Buck")
+        g.board.placehuman(buck)
+        molly = mutants.Human.Human("Molly")
+        g.board.placehuman(molly)
+        charlie = mutants.Human.Human("Charlie")
+        g.board.placehuman(charlie)
+        jeb = mutants.Human.Human("Jeb")
+        g.board.placehuman(jeb)
+        prof = mutants.Professor.Professor()
+        g.board.placehuman(prof)
+        for i in range(mutants.Constants.Constants.NUMROBOTS):
+            g.board.placerobot(mutants.Robot.Robot())
+        g.play(500000)
+
+    def testBoardF(self):
+        g = mutants.Game.Game("testboardF")
+        g.board.getmutants(1)
+        g.board.placemutants()
+        buck = mutants.Human.Human("Buck")
+        g.board.placehuman(buck)
+        molly = mutants.Human.Human("Molly")
+        g.board.placehuman(molly)
+        charlie = mutants.Human.Human("Charlie")
+        g.board.placehuman(charlie)
+        jeb = mutants.Human.Human("Jeb")
+        g.board.placehuman(jeb)
+        prof = mutants.Professor.Professor()
+        g.board.placehuman(prof)
+        for i in range(mutants.Constants.Constants.NUMROBOTS):
+            g.board.placerobot(mutants.Robot.Robot())
+        g.play(500000)
+
+    def testDeadComputer(self):
+        g = mutants.Game.Game("testboard2")
+        g.board.getmutants(1)
+        g.board.placemutants()
+        g.play()
+

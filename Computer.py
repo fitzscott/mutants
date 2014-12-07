@@ -25,6 +25,10 @@ class Computer(mutants.PlayerPiece.PlayerPiece):
     def hasattacked(self, att):
         pass    # The computer never attacks, so this is irrelevant.  Still need to define it, though.
 
+    @property
+    def indicatorstring(self):
+        return "Debris"
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

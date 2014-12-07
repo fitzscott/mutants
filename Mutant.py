@@ -162,7 +162,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         if dirct != -1:
             go_to = mutants.Constants.Constants.directions[dirct]
         else:    # not moving this turn, I guess...
-            self.message(self.fullname + " can't move...  boo hoo hoo")
+            #self.message(self.fullname + " can't move...  boo hoo hoo")
             return(False)
 
         # check if it's a door.  Mutants must smash doors to go through

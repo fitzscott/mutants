@@ -23,7 +23,8 @@ class Constants:
 
     NUMROBOTS = 10
 
-    GAMEBOARD = "testboard5"
+    GAMEBOARD = "Board3"
+    NUMBOARDS = 5
 
     # attributes:  movement, hit points, hand-to-hand, ranged
     playerpieceattributes = {

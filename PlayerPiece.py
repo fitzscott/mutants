@@ -46,3 +46,14 @@ class PlayerPiece(mutants.MovingPiece.MovingPiece):
     def healthyself(self):
         pass
 
+    @property
+    def indicatorstring(self):
+        return "None"
+
+    def damage(self, amount):
+        import mutants.Indicator
+
+        if super().damage(amount):
+            ind = mutants.Indicator.Indicator(self.indicatorstring, self.indicatorstring, self.fullname)
+            self.square.indicator = ind
+

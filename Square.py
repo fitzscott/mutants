@@ -24,6 +24,7 @@ class Square():
         self.__ypos = ypos
         self.__terrain = mutants.Space.Space()
         self.__equipment = None
+        self.__indicator = None
 
     def isOccupied(self):
         return (self.__piece != None)
@@ -46,6 +47,7 @@ class Square():
             self.__piece = piece
             if self.hasequipment() and piece.wantpickup:
                 piece.pickup(self.takeequipment())
+            self.indicator = None
             return(True)
         else:       # Can't move into an occupied square (for now)
             #print("Square at (" + str(self.getXpos()) + ", " + str(self.getYpos()) + ") is occupied." )
@@ -87,6 +89,7 @@ class Square():
         :return:
         """
         self.__equipment = tool
+        self.indicator = None
 
     def getequipment(self):
         return (self.__equipment)
@@ -100,9 +103,22 @@ class Square():
         return(self.__equipment != None)
 
     @property
+    def indicator(self):
+        return (self.__indicator)
+
+    @indicator.setter
+    def indicator(self, ind):
+        self.__indicator = ind
+
+    def hasindicator(self):
+        return (self.__indicator != None)
+
+    @property
     def showing(self):
         whatsShowing = None
-        if self.isOccupied():
+        if self.hasindicator():
+            whatsShowing = self.__indicator
+        elif self.isOccupied():
             whatsShowing = self.piece
         elif self.hasequipment():
             whatsShowing = self.__equipment

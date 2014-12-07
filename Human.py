@@ -18,6 +18,12 @@ class Human(mutants.PlayerPiece.PlayerPiece):
     def healthyself(self):
         if self.carried != None and self.carried.name == "FirstAid":
             self.heal(self.carried.heals)
+            self.message(self.fullname + " uses the first aid kit to heal.")
             self.carried = None
         else:
             self.message(self.fullname + " needs a first aid kit to heal.")
+
+    @property
+    def indicatorstring(self):
+        return "Tombstone"
+

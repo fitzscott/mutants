@@ -300,6 +300,9 @@ class Board():
                 self.__hypcntdn = 4     # reset for next time
             else:
                 self.addmessage("*****  Mutants will be going hyper-radioactive soon!  *****")
+        # also clean out any indicators in squares
+        for sq in self.__squares:
+            sq.indicator = None
 
     def playerpiececount(self):
         return(len(self.__playerpieces))

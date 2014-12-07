@@ -44,3 +44,7 @@ class Robot(mutants.PlayerPiece.PlayerPiece):
         else:
             self.message(self.fullname + " needs spare parts to repair itself.")
 
+    @property
+    def indicatorstring(self):
+        return "Debris"
+

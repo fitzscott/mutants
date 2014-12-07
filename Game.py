@@ -71,23 +71,30 @@ class Game():
         return(self.board.playerpiececount() == 0 or self.board.mutantpiececount() == 0)
         #return(len(self.__mutants) == 0)
 
-    def nextwave(self):
-        if self.__wave == len(mutants.Constants.Constants.MUTANTSPERWAVE):
-            #self.__board.addmessage("")
-            if self.board.playerpiececount() == 0:
-                self.__board.addmessage("Game over!  The evil mutants have triumphed!")
+    def gameover(self):
+        #self.__board.addmessage("")
+        if not self.wavecomplete():
+            return (False)
+        elif self.board.playerpiececount() == 0:
+            self.__board.addmessage("Game over!  The evil mutants have triumphed!")
+            return (True)
+        elif self.__wave == len(mutants.Constants.Constants.MUTANTSPERWAVE):
+            humansleft = self.board.humanpiececount()
+            if humansleft >= 3:
+                self.__board.addmessage("Game over!  Decisive human victory over the mutants!")
+            elif humansleft > 1:
+                self.__board.addmessage("Game over!  Marginal human victory over the mutants!")
+            elif humansleft == 1:
+                self.__board.addmessage("Game over!  It's a draw!")
             else:
-                humansleft = self.board.humanpiececount()
-                if humansleft >= 3:
-                    self.__board.addmessage("Game over!  Decisive human victory over the mutants!")
-                elif humansleft > 1:
-                    self.__board.addmessage("Game over!  Marginal human victory over the mutants!")
-                elif humansleft == 1:
-                    self.__board.addmessage("Game over!  It's a draw!")
-                else:
-                    self.__board.addmessage("Game over!  Marginal victory for the mutants!")
+                self.__board.addmessage("Game over!  Marginal victory for the mutants!")
             #self.__board.addmessage("")
-            return(False)
+            return(True)
+        return (False)
+
+    def nextwave(self):
+        if self.gameover():
+            return (False)
         self.__wave += 1
         self.__board.addmessage("")
         self.__board.addmessage("        Wave " + str(self.__wave) + "!")
@@ -101,8 +108,27 @@ class Game():
         self.board.clearoutdead()
 
     def nextturn(self):
-        self.board.resetpieces(self.__wave)
+        if not self.gameover():
+            self.board.resetpieces(self.__wave)
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    import mutants.Robot
+    import mutants.Professor
+
+    boardnum = random.randint(1, mutants.Constants.Constants.NUMBOARDS)
+    g = Game("Board" + str(boardnum))
+    g.board.getmutants(1)
+    g.board.placemutants()
+    buck = mutants.Human.Human("Buck")
+    g.board.placehuman(buck)
+    molly = mutants.Human.Human("Molly")
+    g.board.placehuman(molly)
+    charlie = mutants.Human.Human("Charlie")
+    g.board.placehuman(charlie)
+    jeb = mutants.Human.Human("Jeb")
+    g.board.placehuman(jeb)
+    prof = mutants.Professor.Professor()
+    g.board.placehuman(prof)
+    for i in range(mutants.Constants.Constants.NUMROBOTS):
+        g.board.placerobot(mutants.Robot.Robot())
+    g.play(500000)
