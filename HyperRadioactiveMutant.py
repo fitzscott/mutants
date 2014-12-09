@@ -18,6 +18,7 @@ class HyperRadioactiveMutant(mutants.RadioactiveMutant.RadioactiveMutant):
         self.ranged = 4     # ranged, deranged, whatever
         self.image = self.name + "0" + origmutant.image[-1]
         self.__mintogo = mintogo
+        self.fullname = origmutant.fullname
 
     def glowngo(self, mintogo=-1):
         if mintogo == -1:

@@ -16,6 +16,7 @@ class Piece:
         self.__name = name
         self.__image = image
         self.__square = None
+        self.__fullname = name
 
     @property
     def name(self):
@@ -27,7 +28,11 @@ class Piece:
 
     @property
     def fullname(self):
-        return(self.__name)
+        return(self.__fullname)
+
+    @fullname.setter
+    def fullname(self, nm):
+        self.__fullname = nm
 
     @property
     def image(self):

@@ -25,6 +25,7 @@ class Constants:
 
     GAMEBOARD = "Board3"
     NUMBOARDS = 5
+    NUMMUTANTNAMESPERSEX = 200
 
     # attributes:  movement, hit points, hand-to-hand, ranged
     playerpieceattributes = {

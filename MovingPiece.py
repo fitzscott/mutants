@@ -28,6 +28,7 @@ class MovingPiece(Piece):
         self.__lastsquare = None
         self.__hasattacked = False
         self.__wantpickup = True
+        self.__maxhitpts = hitPts
 
     def resetMovement(self):
         self.__moveRemaining = self.__movePts
@@ -76,8 +77,9 @@ class MovingPiece(Piece):
                     currsq.removePiece()
                     self.decrRemaining(dist)
                     if not isinstance(self, mutants.Mutant.Mutant):
-                        self.message(self.synopsis() + " moving " + self.fullname + " to (" + \
-                                     str(newsq.getXpos()) + ", " + str(newsq.getYpos()) + ")")
+                        # + " moving " + self.fullname + " to (" + \
+                        #             str(newsq.getXpos()) + ", " + str(newsq.getYpos()) + ")")
+                        self.message(self.synopsis())
                     return (True)
                 #else:
                 #    print("Piece " + self.name + " cannot move to that square.")
@@ -110,7 +112,11 @@ class MovingPiece(Piece):
         return(self.__hitPts > 0)
 
     def heal(self, amount):
-        self.__hitPts += amount
+        if self.__hitPts + amount > self.__maxhitpts:
+            self.message("Can only heal to " + self.fullname + "'s max of " + str(self.__maxhitpts))
+            self.__hitPts = self.__maxhitpts
+        else:
+            self.__hitPts += amount
 
     @property
     def handtohand(self):
@@ -228,6 +234,8 @@ class MovingPiece(Piece):
                 self.hasattacked = self.hthattack(sq)
             else:
                 self.hasattacked = self.rngattack(sq, dist)
+            result = self.hasattacked
+        return (result)
 
     def synopsis(self):
         if self.__carried == None:

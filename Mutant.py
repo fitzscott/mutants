@@ -34,6 +34,8 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         self.__squaresExplored = []
         self.__number = 0
         self.ranged = 2
+        self.__lastdirofinterest = None
+        self.__lasttargetval = None
 
     # hierarchy of things of interest to mutants
     MUTANTINTEREST = [
@@ -56,9 +58,9 @@ class Mutant(mutants.MovingPiece.MovingPiece):
     def number(self, num):
         self.__number = num
 
-    @property
-    def fullname(self):
-        return(self.name + " " + str(self.number))
+    #@property
+    #def fullname(self):
+    #    return(self.name + " " + str(self.number))
 
     def moretosee(self, sq):
         nm = sq.showing.name
@@ -107,6 +109,9 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                                                         distance, thingsseen, thingsseen2ndary, diridx)
                     if thingsseen[diridx] > 3:      #  A real target
                         dirbools[diridx] = False
+                        if self.__lasttargetval == None or thingsseen[diridx] < self.__lasttargetval:
+                            self.__lasttargetval = thingsseen[diridx]
+                            self.__lastdirofinterest = mutants.Constants.Constants.directions[diridx]
             distance += 1
             things2find = dirbools[0] or dirbools[1] or dirbools[2]or dirbools[3]
         #self.message(self.fullname + " pri: " + self.stringseen(thingsseen) + \
@@ -146,6 +151,10 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                 maxidx = nonnegones[nnidx]
             else:
                 maxidx = -1    # all dressed up with nowhere to go
+        if self.__lasttargetval != None and self.__lasttargetval > thingsseen[maxidx]:
+            if self.__lastdirofinterest in mutants.Constants.Constants.directions:
+                maxidx = mutants.Constants.Constants.directions.index(self.__lastdirofinterest)
+                #print("Overriding direction w/ historical for " + self.fullname)
         #print("Final chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
         return (maxidx)     # direction to go
 

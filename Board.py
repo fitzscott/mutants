@@ -2,6 +2,7 @@ __author__ = 'Fitz'
 
 import random
 import math
+import os
 
 import mutants.Square
 import mutants.Constants
@@ -40,6 +41,7 @@ class Board():
         self.__playerpieces = []
         self.__hypth = 10
         self.__hypcntdn = 4
+        self.__mutantnames = []
 
     @property
     def width(self):
@@ -176,6 +178,13 @@ class Board():
     def getmutants(self, wave, overridenum=0):
         import mutants.FileChar
 
+        if len(self.__mutantnames) < 400:
+            cwd = os.getcwd()
+            flnm = os.path.join(cwd, "Resources", "MutantNames.txt")
+            self.__file = open(flnm, "r")
+            self.__mutantnames = self.__file.readlines()
+            self.__file.close()
+
         # If the board comes pre-defined with mutants, don't add new ones.
         resmuties = self.residentmutants()
         if len(resmuties) > 0:
@@ -209,6 +218,13 @@ class Board():
             elif random.randint(1, 6) + random.randint(1, 6) >= 9:       # lots of baseball players, apparently
                 mutie.pickup(fc.getEquipment("!"))
                 bats += 1
+            # Every bad mutant needs a name - they're (radioactive) people, too.
+            mf = random.randint(1, 4)
+            if mf == 4:
+                idx = random.randint(200, 399)
+            else:
+                idx = random.randint(0, 199)
+            mutie.fullname = mutie.name + " " + self.__mutantnames[idx][:-1]    # chop the last character
             self.__mutants.append(mutie)
         print("Handed out " + str(bats) + " bats, " + str(pipes) + " pipes, and " + str(shotguns) + " shotguns.")
 
