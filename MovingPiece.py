@@ -29,6 +29,7 @@ class MovingPiece(Piece):
         self.__hasattacked = False
         self.__wantpickup = True
         self.__maxhitpts = hitPts
+        self.__gotakill = False
 
     def resetMovement(self):
         self.__moveRemaining = self.__movePts
@@ -185,7 +186,7 @@ class MovingPiece(Piece):
         if dieroll + self.handtohand > mutants.Constants.Constants.TOHIT:
             self.message(self.fullname + " attacks " + sq.piece.fullname + weapdescr + " for " + \
                          str(self.handtohanddamage) + " damage.")
-            sq.attackpiece(self.handtohanddamage)
+            self.setgotakill(sq.attackpiece(self.handtohanddamage))
         else:
             self.message(self.fullname + " missed " + sq.piece.fullname + weapdescr)
         return (True)
@@ -209,7 +210,7 @@ class MovingPiece(Piece):
                         weapdescr = ""
                     self.message(self.fullname + " hit " + sq.piece.fullname + weapdescr + " for " \
                                  + str(damage) + " damage!")
-                    sq.attackpiece(damage)
+                    self.setgotakill(sq.attackpiece(damage))
                 else:
                     self.message(self.fullname + " missed "+ sq.piece.fullname + " with the " \
                                  + self.__carried.name)
@@ -260,6 +261,15 @@ class MovingPiece(Piece):
     @wantpickup.setter
     def wantpickup(self, pickitup):
         self.__wantpickup = pickitup
+
+    def diagnosis(self):
+        return(self.synopsis())
+
+    def getgotakill(self):
+        return (self.__gotakill)
+
+    def setgotakill(self, gok):
+        self.__gotakill = gok
 
 if __name__ == "__main__":
     import doctest

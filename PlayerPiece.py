@@ -56,4 +56,7 @@ class PlayerPiece(mutants.MovingPiece.MovingPiece):
         if super().damage(amount):
             ind = mutants.Indicator.Indicator(self.indicatorstring, self.indicatorstring, self.fullname)
             self.square.indicator = ind
+            return (True)
+        else:
+            return (False)
 

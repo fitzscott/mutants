@@ -33,6 +33,7 @@ class Piece:
     @fullname.setter
     def fullname(self, nm):
         self.__fullname = nm
+        self.__fullname = nm
 
     @property
     def image(self):

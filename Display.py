@@ -218,6 +218,10 @@ class Display():
                             piece.special()
                         if event.key == pygame.K_h:
                             piece.healthyself()
+                    else:
+                        if event.key == pygame.K_i:
+                            if sq != None and sq.isOccupied():
+                                self.__board.addmessage(sq.piece.diagnosis())
 
             self.drawboard(drawwhiterect)
             self.message()

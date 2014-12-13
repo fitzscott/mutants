@@ -24,7 +24,7 @@ class Constants:
     NUMROBOTS = 10
 
     GAMEBOARD = "Board3"
-    NUMBOARDS = 5
+    NUMBOARDS = 6
     NUMMUTANTNAMESPERSEX = 200
 
     # attributes:  movement, hit points, hand-to-hand, ranged

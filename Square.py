@@ -141,6 +141,7 @@ class Square():
             return (self.isOccupied() or self.getTerrain().name == "Wall")
 
     def attackpiece(self, damage):
+        result = False  # no kill
         if self.__piece != None:
             result = self.__piece.damage(damage)
             if result:     #  piece was killed
@@ -148,6 +149,7 @@ class Square():
                 self.removePiece()
                 if equip != None:
                     self.addequipment(equip)
+        return (result)
 
     def sendmessage(self, msg):
         self.__board.addmessage(msg)

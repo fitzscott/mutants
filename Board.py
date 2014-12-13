@@ -150,7 +150,7 @@ class Board():
                     sqonpath = sqonpath.getNeighbor(ydirct)
                     ycurincr -= math.copysign(1, ydif)
                 if sqonpath != sq2 and sqonpath != sq1 and sqonpath.isblocking(checkdoors):
-                    print("Can't get there from here")
+                    #print("Can't get there from here")
                     dist = -1
                     break
             assert(dist == -1 or sqonpath == sq2)

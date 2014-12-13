@@ -109,7 +109,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                                                         distance, thingsseen, thingsseen2ndary, diridx)
                     if thingsseen[diridx] > 3:      #  A real target
                         dirbools[diridx] = False
-                        if self.__lasttargetval == None or thingsseen[diridx] < self.__lasttargetval:
+                        if self.__lasttargetval == None or thingsseen[diridx] >= self.__lasttargetval:
                             self.__lasttargetval = thingsseen[diridx]
                             self.__lastdirofinterest = mutants.Constants.Constants.directions[diridx]
             distance += 1
@@ -196,6 +196,10 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                         del self.__doorsExplored[0]
             return (True)
         else:
+            # If we're trying to walk through a wall, reset our search
+            nsq = self.square.getNeighbor(go_to)
+            if nsq == None or nsq.getTerrain().name == "Wall":
+                self.resetsearch()
             return (False)
 
     def attacktarget(self):
@@ -224,6 +228,34 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             if weapon == "Axe" or weapon == "Shotgun":
                 retval = False
         return (retval)
+
+    def diagnosis(self):
+        if self.__lastdirofinterest == None:
+            lastdir = "No last dir"
+        else:
+            if self.__lastdirofinterest in mutants.Constants.Constants.directions:
+                lastdiridx = mutants.Constants.Constants.directions.index(self.__lastdirofinterest)
+                lastdir = mutants.Constants.Constants.dirStrings[lastdiridx]
+            else:
+                lastdir = "Illegitimate direction"
+        if self.__lasttargetval == None:
+            lasttarget = "No last target"
+        else:
+            lasttarget = str(self.MUTANTINTEREST[self.__lasttargetval]).split(".")[2]
+        addlinfo = "Looked: " + lastdir + " at: " + lasttarget
+        return("Diagnosis for " + self.fullname + ": " + addlinfo)
+
+    def getgotakill(self):
+        return (self.__gotakill)
+
+    def setgotakill(self, gok):
+        if gok:       # killed target, so reset target search
+            self.resetsearch()
+        super().setgotakill(gok)
+
+    def resetsearch(self):
+        self.__lasttargetval = None
+        self.__lastdirofinterest = None
 
 if __name__ == "__main__":
     import doctest
