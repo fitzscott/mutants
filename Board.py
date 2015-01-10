@@ -178,6 +178,8 @@ class Board():
     def getmutants(self, wave, overridenum=0):
         import mutants.FileChar
 
+        self.__hypcntdn = 4     # reset for each mutant gathering
+
         if len(self.__mutantnames) < 400:
             cwd = os.getcwd()
             flnm = os.path.join(cwd, "Resources", "MutantNames.txt")
@@ -313,7 +315,6 @@ class Board():
             if self.__hypcntdn <= 0:
                 self.addmessage("****  Mutants have gone hyper-radioactive!  *****")
                 self.hypermutants(wave)
-                self.__hypcntdn = 4     # reset for next time
             else:
                 self.addmessage("*****  Mutants will be going hyper-radioactive soon!  *****")
         # also clean out any indicators in squares
@@ -348,11 +349,13 @@ class Board():
             glomin = 7
 
         for mutidx in range(len(self.__mutants)):
-            hypmutie = mutants.HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx], glomin)
-            sq = self.__mutants[mutidx].square
-            sq.removePiece()
-            hypmutie.setPosition(sq)
-            self.__mutants[mutidx] = hypmutie
+            # Don't convert them more than once.
+            if not isinstance(self.__mutants[mutidx], mutants.HyperRadioactiveMutant.HyperRadioactiveMutant):
+                hypmutie = mutants.HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx], glomin)
+                sq = self.__mutants[mutidx].square
+                sq.removePiece()
+                hypmutie.setPosition(sq)
+                self.__mutants[mutidx] = hypmutie
 
     @property
     def hyperthreshhold(self):

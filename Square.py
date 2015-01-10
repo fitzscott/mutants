@@ -89,7 +89,7 @@ class Square():
         :return:
         """
         self.__equipment = tool
-        self.indicator = None
+        #self.indicator = None
 
     def getequipment(self):
         return (self.__equipment)
