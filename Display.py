@@ -27,6 +27,7 @@ class Display():
         self.__board = None
         self.__game = game
         self.__bgcolor = (223, 223, 223)
+        self.__helpinfo = None
 
     def loadBoard(self, flnm):
         bf = mutants.BoardFile.BoardFile()
@@ -71,6 +72,12 @@ class Display():
             self.loadImage(cwd, "HyperRadioactiveMutant0" + str(i+1))
         self.loadImage(cwd, "Professor")
         self.loadBoard(boardname)
+
+        flnm = os.path.join(cwd, "Resources", "HelpInfo.txt")
+        hfile = open(flnm, "r")
+        self.__helpinfo = hfile.readlines()
+        hfile.close()
+
         self.__font = pygame.font.SysFont("Courier", 12)
         msgdisp = self.__font.render("Attack of the Mutants!", 1, (63, 0, 63), self.__bgcolor)
         self.__messageheight = msgdisp.get_size()[1] + 1
@@ -88,6 +95,18 @@ class Display():
             self.__screen.blit(msgdisp, (5, y))
             y += self.__messageheight
         self.__screen.blit(self.__nextbuttonmsg, (797 - self.__nextbuttonsize[0], self.bottomofboard() + 3))
+
+    def insidenextbutton(self, x, y):
+        if x >= 797 - self.__nextbuttonsize[0] and \
+            x <= 797 and \
+            y >= self.bottomofboard() + 3 and \
+            y <= self.bottomofboard() + self.__nextbuttonsize[1] + 3:
+            return True
+        return False
+
+    def helpinfo(self):
+        for helpline in range(len(self.__helpinfo)):
+            self.addmessage(self.__helpinfo[helpline][:-1])
 
     def addmessage(self, msg):
         self.__board.addmessage(msg)
@@ -178,9 +197,12 @@ class Display():
                             self.__board.addmessage("That is a " + sq.getequipment().name)
                             self.__game.clearfoci()
                     else:
-                        self.__game.mutantturn = True
-                        #gamecontinues = self.__game.nextturn()
-                        self.__game.nextturn()
+                        if self.insidenextbutton(x, y):
+                            self.__game.mutantturn = True
+                            #gamecontinues = self.__game.nextturn()
+                            self.__game.nextturn()
+                        else:
+                            self.helpinfo()
 
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:       # left click
@@ -222,6 +244,8 @@ class Display():
                         if event.key == pygame.K_i:
                             if sq != None and sq.isOccupied():
                                 self.__board.addmessage(sq.piece.diagnosis())
+                    if event.key == pygame.K_QUESTION or event.key == pygame.K_SLASH:
+                        self.helpinfo()
 
             self.drawboard(drawwhiterect)
             self.message()
