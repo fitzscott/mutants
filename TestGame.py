@@ -3,18 +3,18 @@ __author__ = 'Fitz'
 import unittest
 import random
 
-import mutants.Game
-import mutants.Human
-import mutants.Constants
-import mutants.Robot
-import mutants.Professor
+import Game as g1
+import Human as hum
+import Constants as const
+import Robot as rob
+import Professor as prof
 
 class TestGame(unittest.TestCase):
     def setUp(self):
         pass
 
     def testG1(self):
-        g = mutants.Game.Game()
+        g = g1.Game()
         g.board.getmutants(1)
         g.board.placemutants()
         g.play()
@@ -24,7 +24,7 @@ class TestGame(unittest.TestCase):
         #    print("Got the usual SystemExit error")
 
     def testG6(self):
-        g = mutants.Game.Game("testboard6")
+        g = g1.Game("testboard6")
         g.board.getmutants(1)
         g.board.placemutants()
         g.play()
@@ -34,13 +34,13 @@ class TestGame(unittest.TestCase):
         #    print("Got the usual SystemExit error")
 
     def testG7(self):
-        g = mutants.Game.Game("testboard7")
+        g = g1.Game("testboard7")
         g.board.getmutants(1)
         # skip placing the mutants - they're defined on the board
         g.play()
 
     def testG8(self):
-        g = mutants.Game.Game("testboard8")
+        g = g1.Game("testboard8")
         g.board.getmutants(1)
         # skip placing the mutants - they're defined on the board
         g.play()
@@ -56,7 +56,7 @@ class TestGame(unittest.TestCase):
             self.assertTrue(x < max)
 
     def testGX(self):
-        g = mutants.Game.Game()
+        g = g1.Game()
         g.board.getmutants(1)
         g.board.placemutants()
         g.play(4000)
@@ -66,7 +66,7 @@ class TestGame(unittest.TestCase):
         g.play(4000)
 
     def testGY(self):
-        g = mutants.Game.Game("testboard9")
+        g = g1.Game("testboard9")
         g.board.getmutants(1)
         g.board.placemutants()
         g.play(5000)
@@ -76,257 +76,257 @@ class TestGame(unittest.TestCase):
         g.play(5000)
 
     def test1Human(self):
-        g = mutants.Game.Game("testboard9")
+        g = g1.Game("testboard9")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
         g.play(5000)
 
     def testManyHumans(self):
-        g = mutants.Game.Game("testboard9")
+        g = g1.Game("testboard9")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
         g.play(5000)
 
     def testHumansAndRobots(self):
-        g = mutants.Game.Game("testboard9")
+        g = g1.Game("testboard9")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBadMove(self):
-        g = mutants.Game.Game("testboardA")
+        g = g1.Game("testboardA")
         g.board.getmutants(1, 2)
         g.board.placemutants()
         for i in range(3):
-            g.board.placerobot(mutants.Robot.Robot())
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testNewDist(self):
-        g = mutants.Game.Game("testboardA")
+        g = g1.Game("testboardA")
         g.board.getmutants(1, 2)
         g.board.placemutants()
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
         g.play(500000)
 
     def testMutantDirectionsAgain(self):
-        g = mutants.Game.Game("testboardA")
+        g = g1.Game("testboardA")
         g.board.getmutants(1, 2)
         g.board.placemutants()
         g.play(500000)
 
     def testMutantDirectionsYetAgain(self):
-        g = mutants.Game.Game("testboard5")
+        g = g1.Game("testboard5")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testProfessor(self):
-        g = mutants.Game.Game("testboard5")
+        g = g1.Game("testboard5")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testRadioactive(self):
-        g = mutants.Game.Game("testboard5")
+        g = g1.Game("testboard5")
         g.board.getmutants(1, 10)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
         g.play(500000)
 
     def testComputer(self):
-        g = mutants.Game.Game("testboardB")
+        g = g1.Game("testboardB")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBoardB(self):
-        g = mutants.Game.Game("testboardB")
+        g = g1.Game("testboardB")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBoardC(self):
-        g = mutants.Game.Game("testboardC")
+        g = g1.Game("testboardC")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testHyper(self):
-        g = mutants.Game.Game("testboardC")
+        g = g1.Game("testboardC")
         g.board.getmutants(1)
         g.board.placemutants()
         g.board.hyperthreshhold = 57        # yow
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBoardD(self):
-        g = mutants.Game.Game("testboardD")
+        g = g1.Game("testboardD")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBoardD2(self):
-        g = mutants.Game.Game("testboardD")
+        g = g1.Game("testboardD")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        jeb = mutants.Human.Human("Jeb")
+        jeb = hum.Human("Jeb")
         g.board.placehuman(jeb)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBoardE(self):
-        g = mutants.Game.Game("testboardE")
+        g = g1.Game("testboardE")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        jeb = mutants.Human.Human("Jeb")
+        jeb = hum.Human("Jeb")
         g.board.placehuman(jeb)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testBoardF(self):
-        g = mutants.Game.Game("testboardF")
+        g = g1.Game("testboardF")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        jeb = mutants.Human.Human("Jeb")
+        jeb = hum.Human("Jeb")
         g.board.placehuman(jeb)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 
     def testDeadComputer(self):
-        g = mutants.Game.Game("testboard2")
+        g = g1.Game("testboard2")
         g.board.getmutants(1)
         g.board.placemutants()
         g.play()
 
     def testBoard6(self):
-        g = mutants.Game.Game("Board6")
+        g = g1.Game("Board6")
         g.board.getmutants(1)
         g.board.placemutants()
-        buck = mutants.Human.Human("Buck")
+        buck = hum.Human("Buck")
         g.board.placehuman(buck)
-        molly = mutants.Human.Human("Molly")
+        molly = hum.Human("Molly")
         g.board.placehuman(molly)
-        charlie = mutants.Human.Human("Charlie")
+        charlie = hum.Human("Charlie")
         g.board.placehuman(charlie)
-        jeb = mutants.Human.Human("Jeb")
+        jeb = hum.Human("Jeb")
         g.board.placehuman(jeb)
-        prof = mutants.Professor.Professor()
-        g.board.placehuman(prof)
-        for i in range(mutants.Constants.Constants.NUMROBOTS):
-            g.board.placerobot(mutants.Robot.Robot())
+        prof1 = prof.Professor()
+        g.board.placehuman(prof1)
+        for i in range(const.Constants.NUMROBOTS):
+            g.board.placerobot(rob.Robot())
         g.play(500000)
 

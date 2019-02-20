@@ -2,10 +2,10 @@ __author__ = 'Fitz'
 
 import random
 
-import mutants.Mutant
-import mutants.Constants
+import Mutant as m
+import Constants as const
 
-class RadioactiveMutant(mutants.Mutant.Mutant):
+class RadioactiveMutant(m.Mutant):
     """
     Radioactive mutants - faster, but also "glow 'n' go", sending radiation outward
     """
@@ -25,7 +25,7 @@ class RadioactiveMutant(mutants.Mutant.Mutant):
             self.message(self.fullname + " glows with radioactivity & vaporizes itself (and maybe others)")
             # simulate the gamma rays by boosting hand-to-hand & attacking
             self.handtohand += random.randint(1, 6)
-            for dirct in mutants.Constants.Constants.directions:
+            for dirct in const.Constants.directions:
                 self.hasattacked = False
                 attsq = self.square.getNeighbor(dirct, 1)
                 if attsq != None and attsq.isOccupied():

@@ -1,5 +1,5 @@
 __author__ = 'Fitz'
-import mutants.Square
+# import Square as s
 
 class Piece:
     """
@@ -7,9 +7,6 @@ class Piece:
     >>> p = Piece("Bob", None)
     >>> print(p.name)
     Bob
-    >>> sq = mutants.Square.Square(None)
-    >>> p.setPosition(sq)
-    True
     """
 
     def __init__(self, name, image):

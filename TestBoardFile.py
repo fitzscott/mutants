@@ -1,12 +1,12 @@
 import unittest
-import mutants.BoardFile
-import mutants.Constants
-import mutants.Mutant
+import BoardFile
+import Constants
+import Mutant
 
 class TestBoardFile(unittest.TestCase):
     def setUp(self):
         super().setUp()
-        self.__bf = mutants.BoardFile.BoardFile()
+        self.__bf = BoardFile.BoardFile()
 
     def tearDown(self):
         pass
@@ -59,39 +59,39 @@ class TestBoardFile(unittest.TestCase):
         right = True
         while things2find:
             if up:
-                nsq = self.look(sq, mutants.Constants.Constants.UP, distance)
-                if type(nsq.showing) in mutants.Mutant.Mutant.MUTANTINTEREST:
-                    idx = mutants.Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
+                nsq = self.look(sq, Constants.Constants.UP, distance)
+                if type(nsq.showing) in Mutant.Mutant.MUTANTINTEREST:
+                    idx = Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
                     if idx > thingsseen[0]:
                         thingsseen[0] = idx
                 up = self.doneLooking(nsq)
             if down:
-                nsq = self.look(sq, mutants.Constants.Constants.DOWN, distance)
-                if type(nsq.showing) in mutants.Mutant.Mutant.MUTANTINTEREST:
-                    idx = mutants.Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
+                nsq = self.look(sq, Constants.Constants.DOWN, distance)
+                if type(nsq.showing) in Mutant.Mutant.MUTANTINTEREST:
+                    idx = Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
                     if idx > thingsseen[1]:
                         thingsseen[1] = idx
                 down = self.doneLooking(nsq)
             if left:
-                nsq = self.look(sq, mutants.Constants.Constants.LEFT, distance)
-                if type(nsq.showing) in mutants.Mutant.Mutant.MUTANTINTEREST:
-                    idx = mutants.Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
+                nsq = self.look(sq, Constants.Constants.LEFT, distance)
+                if type(nsq.showing) in Mutant.Mutant.MUTANTINTEREST:
+                    idx = Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
                     if idx > thingsseen[2]:
                         thingsseen[2] = idx
                 left = self.doneLooking(nsq)
             if right:
-                nsq = self.look(sq, mutants.Constants.Constants.RIGHT, distance)
-                if type(nsq.showing) in mutants.Mutant.Mutant.MUTANTINTEREST:
-                    idx = mutants.Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
+                nsq = self.look(sq, Constants.Constants.RIGHT, distance)
+                if type(nsq.showing) in Mutant.Mutant.MUTANTINTEREST:
+                    idx = Mutant.Mutant.MUTANTINTEREST.index(type(nsq.showing))
                     if idx > thingsseen[3]:
                         thingsseen[3] = idx
                 right = self.doneLooking(nsq)
             distance += 1
             things2find = up or down or left or right
-        #print("Up: " + str(mutants.Mutant.Mutant.MUTANTINTEREST[thingsseen[0]]))
-        #print("Down: " + str(mutants.Mutant.Mutant.MUTANTINTEREST[thingsseen[1]]))
-        #print("Left: " + str(mutants.Mutant.Mutant.MUTANTINTEREST[thingsseen[2]]))
-        #print("Right: " + str(mutants.Mutant.Mutant.MUTANTINTEREST[thingsseen[3]]))
+        #print("Up: " + str(Mutant.Mutant.MUTANTINTEREST[thingsseen[0]]))
+        #print("Down: " + str(Mutant.Mutant.MUTANTINTEREST[thingsseen[1]]))
+        #print("Left: " + str(Mutant.Mutant.MUTANTINTEREST[thingsseen[2]]))
+        #print("Right: " + str(Mutant.Mutant.MUTANTINTEREST[thingsseen[3]]))
         max = maxidx = -1
         for i in range(len(thingsseen)):
             if thingsseen[i] > max:
@@ -102,7 +102,7 @@ class TestBoardFile(unittest.TestCase):
     def testNeighbors(self):
         self.__bf.readFromFile("testboard5")
         b = self.__bf.createBoard()
-        m = mutants.Mutant.Mutant()
+        m = Mutant.Mutant()
         sq = b.getSquare(27, 12)
         self.assertEqual(sq.getTerrain().name, "Space")
         sq.addPiece(m)
@@ -122,7 +122,7 @@ class TestBoardFile(unittest.TestCase):
     def testNeighbors2(self):
         self.__bf.readFromFile("testboard5")
         b = self.__bf.createBoard()
-        m = mutants.Mutant.Mutant()
+        m = Mutant.Mutant()
         sq = b.getSquare(27, 12)
         self.assertEqual(sq.getTerrain().name, "Space")
         self.assertTrue(m.setPosition(sq))

@@ -1,10 +1,9 @@
 __author__ = 'Fitz'
 
 import random
-import mutants.PlayerPiece
-import mutants.FileChar
+import PlayerPiece as pp
 
-class Robot(mutants.PlayerPiece.PlayerPiece):
+class Robot(pp.PlayerPiece):
     """
     Represents the human's helpers, carrying rifles.
     >>> r = Robot()
@@ -13,10 +12,12 @@ class Robot(mutants.PlayerPiece.PlayerPiece):
     Robot full name is RO1148
     """
     def __init__(self, madefromscrap=False):
+        import FileChar as fc
+
         super().__init__("Robot")
         self.__focus = False
         self.__number = random.randint(0, 8000) + 1000
-        fc = mutants.FileChar.FileChar()
+        fc = fc.FileChar()
         rifle = fc.getEquipment(">")
         if not madefromscrap:
             self.pickup(rifle)

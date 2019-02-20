@@ -2,12 +2,12 @@ __author__ = 'Fitz'
 
 import random
 
-import mutants.Board
-import mutants.BoardFile
-import mutants.Human
-import mutants.Display
-import mutants.Constants
-import mutants.Mutant
+# import Board as b
+# import BoardFile
+import Human as hum
+import Display as disp
+import Constants as const
+# import Mutant as m
 
 class Game():
     """
@@ -19,9 +19,9 @@ class Game():
     >>> g.board.placemutants()
     """
 
-    def __init__(self, boardname=mutants.Constants.Constants.GAMEBOARD):
+    def __init__(self, boardname=const.Constants.GAMEBOARD):
         self.__wave = 1
-        self.__display = mutants.Display.Display(self)
+        self.__display = disp.Display(self)
         self.__display.loadResources(boardname)
         self.__board = self.__display.board
         self.__mutantturn = False
@@ -78,7 +78,7 @@ class Game():
         elif self.board.playerpiececount() == 0:
             self.__board.addmessage("Game over!  The evil mutants have triumphed!")
             return (True)
-        elif self.__wave == len(mutants.Constants.Constants.MUTANTSPERWAVE):
+        elif self.__wave == len(const.Constants.MUTANTSPERWAVE):
             humansleft = self.board.humanpiececount()
             if humansleft >= 3:
                 self.__board.addmessage("Game over!  Decisive human victory over the mutants!")
@@ -112,23 +112,23 @@ class Game():
             self.board.resetpieces(self.__wave)
 
 if __name__ == "__main__":
-    import mutants.Robot
-    import mutants.Professor
+    import Robot
+    import Professor
 
-    boardnum = random.randint(1, mutants.Constants.Constants.NUMBOARDS)
+    boardnum = random.randint(1, const.Constants.NUMBOARDS)
     g = Game("Board" + str(boardnum))
     g.board.getmutants(1)
     g.board.placemutants()
-    buck = mutants.Human.Human("Buck")
+    buck = hum.Human("Buck")
     g.board.placehuman(buck)
-    molly = mutants.Human.Human("Molly")
+    molly = hum.Human("Molly")
     g.board.placehuman(molly)
-    charlie = mutants.Human.Human("Charlie")
+    charlie = hum.Human("Charlie")
     g.board.placehuman(charlie)
-    jeb = mutants.Human.Human("Jeb")
+    jeb = hum.Human("Jeb")
     g.board.placehuman(jeb)
-    prof = mutants.Professor.Professor()
+    prof = Professor.Professor()
     g.board.placehuman(prof)
-    for i in range(mutants.Constants.Constants.NUMROBOTS):
-        g.board.placerobot(mutants.Robot.Robot())
+    for i in range(const.Constants.NUMROBOTS):
+        g.board.placerobot(Robot.Robot())
     g.play(500000)

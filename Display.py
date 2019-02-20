@@ -3,10 +3,10 @@ __author__ = 'Fitz'
 import os
 import pygame, sys
 from pygame.locals import *
-import mutants.Constants
-import mutants.BoardFile
-import mutants.Game
-import mutants.PlayerPiece
+import Constants as const
+import BoardFile as bf
+# import Game
+import PlayerPiece as pp
 
 class Display():
     """
@@ -19,7 +19,7 @@ class Display():
     def __init__(self, game):
         pygame.init()
         pygame.mixer.init()
-        self.__screen = pygame.display.set_mode(mutants.Constants.Constants.WINSIZE, pygame.DOUBLEBUF)
+        self.__screen = pygame.display.set_mode(const.Constants.WINSIZE, pygame.DOUBLEBUF)
         pygame.display.set_caption("Attack of the Mutants!")
         self.__clock = pygame.time.Clock()
         #pygame.mouse.set_visible(0)
@@ -30,9 +30,9 @@ class Display():
         self.__helpinfo = None
 
     def loadBoard(self, flnm):
-        bf = mutants.BoardFile.BoardFile()
-        bf.readFromFile(flnm)
-        self.__board = bf.createBoard()
+        bfx = bf.BoardFile()
+        bfx.readFromFile(flnm)
+        self.__board = bfx.createBoard()
         self.__board.addmessage("The mutants are attacking!")
 
     def loadImage(self, cwd, typestr):
@@ -81,7 +81,7 @@ class Display():
         self.__font = pygame.font.SysFont("Courier", 12)
         msgdisp = self.__font.render("Attack of the Mutants!", 1, (63, 0, 63), self.__bgcolor)
         self.__messageheight = msgdisp.get_size()[1] + 1
-        maxmessages = (mutants.Constants.Constants.WINSIZE[1] - self.bottomofboard()) / self.__messageheight - 1
+        maxmessages = (const.Constants.WINSIZE[1] - self.bottomofboard()) / self.__messageheight - 1
         self.__board.maxmessages = maxmessages
         buttonfont = pygame.font.SysFont("Courier", 24)
         self.__nextbuttonmsg = buttonfont.render(" Next Turn ", 1, (255, 255, 255), (0, 127, 0))
@@ -121,13 +121,13 @@ class Display():
                     img = self.__images[toshow.image]
                 else:
                     print("Tried showing " + toshow.name + ", but couldn't.")
-                sidesize = mutants.Constants.Constants.IMAGESIDESIZE
+                sidesize = const.Constants.IMAGESIDESIZE
                 x = col * sidesize
                 y = row * sidesize
                 self.__screen.blit(img, (x, y))
                 if (sq.isOccupied()):
                     occupant = sq.piece
-                    if issubclass(type(occupant), mutants.PlayerPiece.PlayerPiece):
+                    if issubclass(type(occupant), pp.PlayerPiece):
                         if occupant.canmove() and not occupant.hasattacked:
                             boxcolor = (255, 0, 255)
                         elif occupant.canmove():
@@ -141,7 +141,7 @@ class Display():
 
         if drawwhiterect:
             x, y = pygame.mouse.get_pos()
-            sidesize = mutants.Constants.Constants.IMAGESIDESIZE
+            sidesize = const.Constants.IMAGESIDESIZE
             halfsize = sidesize // 2
             xp = x - halfsize
             if xp < 0:
@@ -168,8 +168,8 @@ class Display():
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
-                    col = x // mutants.Constants.Constants.IMAGESIDESIZE
-                    row = y // mutants.Constants.Constants.IMAGESIDESIZE
+                    col = x // const.Constants.IMAGESIDESIZE
+                    row = y // const.Constants.IMAGESIDESIZE
                     sq = self.__board.getSquare(col, row)
                     if (sq != None):
                         if (sq.isOccupied()):
@@ -177,7 +177,7 @@ class Display():
                             occupant = sq.piece
                             if event.button == 1:       # left click
                                 #print("Left click on " + occupant.fullname)
-                                if issubclass(type(occupant), mutants.PlayerPiece.PlayerPiece):
+                                if issubclass(type(occupant), pp.PlayerPiece):
                                     self.__game.clearfoci()
                                     occupant.focus = True
                                     #print(occupant.name + " has focus at (" + str(col) + ", " + str(row) + ").")
@@ -207,8 +207,8 @@ class Display():
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:       # left click
                         x, y = pygame.mouse.get_pos()
-                        col = x // mutants.Constants.Constants.IMAGESIDESIZE
-                        row = y // mutants.Constants.Constants.IMAGESIDESIZE
+                        col = x // const.Constants.IMAGESIDESIZE
+                        row = y // const.Constants.IMAGESIDESIZE
                         sq = self.__board.getSquare(col, row)
                         self.__game.movepiecewithfocus(sq)
                         #if not self.__game.movepiecewithfocus(sq):
@@ -229,13 +229,13 @@ class Display():
                         #    print(piece.fullname + " does not want to pick stuff up")
                         piece.wantpickup = pickup
                         if event.key == pygame.K_UP:
-                            piece.moveindirection(mutants.Constants.Constants.UP)
+                            piece.moveindirection(const.Constants.UP)
                         if event.key == pygame.K_DOWN:
-                            piece.moveindirection(mutants.Constants.Constants.DOWN)
+                            piece.moveindirection(const.Constants.DOWN)
                         if event.key == pygame.K_LEFT:
-                            piece.moveindirection(mutants.Constants.Constants.LEFT)
+                            piece.moveindirection(const.Constants.LEFT)
                         if event.key == pygame.K_RIGHT:
-                            piece.moveindirection(mutants.Constants.Constants.RIGHT)
+                            piece.moveindirection(const.Constants.RIGHT)
                         if event.key == pygame.K_s:
                             piece.special()
                         if event.key == pygame.K_h:
@@ -264,7 +264,7 @@ class Display():
                 i += 1
 
     def bottomofboard(self):
-        return (self.__board.height * mutants.Constants.Constants.IMAGESIDESIZE)
+        return (self.__board.height * const.Constants.IMAGESIDESIZE)
 
 if __name__ == "__main__":
     import doctest

@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.RadioactiveMutant
+import RadioactiveMutant as rm
 
-class HyperRadioactiveMutant(mutants.RadioactiveMutant.RadioactiveMutant):
+class HyperRadioactiveMutant(rm.RadioactiveMutant):
     """
     HyperRadioactiveMutant - obvious, right?  Really, it's to hurry the game along
     when there aren't very many mutants left on the board.  These are those remaining

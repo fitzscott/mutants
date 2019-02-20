@@ -2,24 +2,25 @@ __author__ = 'Fitz'
 
 import random
 
-import mutants.Constants
-import mutants.MovingPiece
-import mutants.ExteriorSpace
-import mutants.Space
-import mutants.Door
-import mutants.Wall
-import mutants.Equipment
-import mutants.Robot
-import mutants.Human
-import mutants.Professor
-import mutants.Computer
+import Constants as cnst
+import MovingPiece as mp
+import ExteriorSpace as es
+import Space as spc
+import Door as dr
+# import Wall as wl
+import Equipment as eqp
+import Robot as rob
+import Human as hum
+import Professor as prof
+import Computer as comp
 
-class Mutant(mutants.MovingPiece.MovingPiece):
+
+class Mutant(mp.MovingPiece):
     """
     The most important class in the game. Well, the one the game is named after, I guess.
     >>> m = Mutant()
-    >>> print(m.MUTANTINTEREST[4])
-    <class 'mutants.Equipment.Equipment'>
+    >>> print(m.MUTANTINTEREST[3])
+    <class 'Equipment.Equipment'>
     """
 
     def __init__(self, name="Mutant", image="Mutant2", movePts=2, hitPts=3, h2h=3):
@@ -38,16 +39,17 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         self.__lasttargetval = None
 
     # hierarchy of things of interest to mutants
+    # used to include:
+    # wl.Wall,
     MUTANTINTEREST = [
-        #mutants.Wall.Wall,
-        mutants.ExteriorSpace.ExteriorSpace,
-        mutants.Space.Space,
-        mutants.Door.Door,
-        mutants.Equipment.Equipment,
-        mutants.Robot.Robot,
-        mutants.Computer.Computer,
-        mutants.Human.Human,
-        mutants.Professor.Professor
+        es.ExteriorSpace,
+        spc.Space,
+        dr.Door,
+        eqp.Equipment,
+        rob.Robot,
+        comp.Computer,
+        hum.Human,
+        prof.Professor
     ]
 
     @property
@@ -73,7 +75,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         nsq = sq.getNeighbor(dirct, dist)
         if nsq == None:
             return (None)
-        if dist > mutants.Constants.Constants.MAXMUTANTEYESIGHT:
+        if dist > cnst.Constants.MAXMUTANTEYESIGHT:
             return (None)
         if not self.moretosee(nsq):
             return (None)
@@ -105,13 +107,13 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         while things2find:
             for diridx in range(len(dirbools)):
                 if dirbools[diridx]:
-                    dirbools[diridx] = self.checkDirection(sq, mutants.Constants.Constants.directions[diridx], \
+                    dirbools[diridx] = self.checkDirection(sq, cnst.Constants.directions[diridx], \
                                                         distance, thingsseen, thingsseen2ndary, diridx)
                     if thingsseen[diridx] > 3:      #  A real target
                         dirbools[diridx] = False
                         if self.__lasttargetval == None or thingsseen[diridx] >= self.__lasttargetval:
                             self.__lasttargetval = thingsseen[diridx]
-                            self.__lastdirofinterest = mutants.Constants.Constants.directions[diridx]
+                            self.__lastdirofinterest = cnst.Constants.directions[diridx]
             distance += 1
             things2find = dirbools[0] or dirbools[1] or dirbools[2]or dirbools[3]
         #self.message(self.fullname + " pri: " + self.stringseen(thingsseen) + \
@@ -126,7 +128,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
                 dirsatmax = []
             if thingsseen[i] == max and max > -1:
                 dirsatmax.append(i)
-        #print("Initial chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
+        #print("Initial chosen direction is " + str(maxidx) + " = " + cnst.Constants.dirStrings[diridx])
         # If there are ties for chosen direction, pick one randomly.
         # Not ideal, but maybe it'll be enough.
         lendam = len(dirsatmax)
@@ -134,7 +136,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             tiebreaker = random.randint(0, lendam-1)
             #print("Length of tied array is " + str(lendam) + ", tiebreaker is " + str(tiebreaker))
             maxidx = dirsatmax[tiebreaker]
-        #print("Second chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
+        #print("Second chosen direction is " + str(maxidx) + " = " + cnst.Constants.dirStrings[diridx])
         if maxidx == -1:
             # Need to go through the secondary list
             nonnegones = []
@@ -152,30 +154,30 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             else:
                 maxidx = -1    # all dressed up with nowhere to go
         if self.__lasttargetval != None and self.__lasttargetval > thingsseen[maxidx]:
-            if self.__lastdirofinterest in mutants.Constants.Constants.directions:
-                maxidx = mutants.Constants.Constants.directions.index(self.__lastdirofinterest)
+            if self.__lastdirofinterest in cnst.Constants.directions:
+                maxidx = cnst.Constants.directions.index(self.__lastdirofinterest)
                 #print("Overriding direction w/ historical for " + self.fullname)
-        #print("Final chosen direction is " + str(maxidx) + " = " + mutants.Constants.Constants.dirStrings[diridx])
+        #print("Final chosen direction is " + str(maxidx) + " = " + cnst.Constants.dirStrings[diridx])
         return (maxidx)     # direction to go
 
     def stringseen(self, seen):
         strret = ""
         for i in range(len(seen)):
             mistr = str(self.MUTANTINTEREST[seen[i]]).split(".")[2][0:4]
-            strret += mutants.Constants.Constants.dirStrings[i] + ":" + mistr + " "
+            strret += cnst.Constants.dirStrings[i] + ":" + mistr + " "
         return (strret)
 
     def moveindirection(self, direction):
         dirct = self.chooseDirection()
-        #self.message("Moving mutant in direction " + str(dirct) + ": " + mutants.Constants.Constants.dirStrings[dirct])
+        #self.message("Moving mutant in direction " + str(dirct) + ": " + cnst.Constants.dirStrings[dirct])
         if dirct != -1:
-            go_to = mutants.Constants.Constants.directions[dirct]
+            go_to = cnst.Constants.directions[dirct]
         else:    # not moving this turn, I guess...
             #self.message(self.fullname + " can't move...  boo hoo hoo")
             return(False)
 
         # check if it's a door.  Mutants must smash doors to go through
-        if len(self.__squaresExplored) > mutants.Constants.Constants.MAXMUTANTSQUAREMEM:
+        if len(self.__squaresExplored) > cnst.Constants.MAXMUTANTSQUAREMEM:
             #print("Resetting squares explored")
             self.__squaresExplored = []
             if len(self.__doorsExplored) >= 1:
@@ -210,7 +212,7 @@ class Mutant(mutants.MovingPiece.MovingPiece):
             maxdist = 1         # hand-to-hand only
         currdist = 1
         while currdist <= maxdist:
-            for dirct in mutants.Constants.Constants.directions:
+            for dirct in cnst.Constants.directions:
                 goodsq = self.evaluatesquare(self.getPosition(), dirct, currdist)
                 if goodsq != None and type(goodsq.showing) in self.MUTANTINTEREST \
                         and self.MUTANTINTEREST.index(type(goodsq.showing)) > 3:
@@ -233,9 +235,9 @@ class Mutant(mutants.MovingPiece.MovingPiece):
         if self.__lastdirofinterest == None:
             lastdir = "No last dir"
         else:
-            if self.__lastdirofinterest in mutants.Constants.Constants.directions:
-                lastdiridx = mutants.Constants.Constants.directions.index(self.__lastdirofinterest)
-                lastdir = mutants.Constants.Constants.dirStrings[lastdiridx]
+            if self.__lastdirofinterest in cnst.Constants.directions:
+                lastdiridx = cnst.Constants.directions.index(self.__lastdirofinterest)
+                lastdir = cnst.Constants.dirStrings[lastdiridx]
             else:
                 lastdir = "Illegitimate direction"
         if self.__lasttargetval == None:

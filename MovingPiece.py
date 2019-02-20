@@ -2,10 +2,10 @@ __author__ = 'Fitz'
 
 import random
 
-from mutants.Piece import Piece
-import mutants.Constants
+import Piece as pc
+import Constants as const
 
-class MovingPiece(Piece):
+class MovingPiece(pc.Piece):
     """
     Represents a piece that can move, either under the player's control or the computer's.
     >>> mp = MovingPiece("Ozzie", None)
@@ -14,7 +14,7 @@ class MovingPiece(Piece):
     >>> mp.handtohand = 4
     >>> mp.handtohand
     4
-    >>> if not mp.damage(1): print(mp.name + " is dead.  Aww....")
+    >>> if mp.damage(1): print(mp.name + " is dead.  Aww....")
     Ozzie is dead.  Aww....
     """
     def __init__(self, name, image, movePts = 0, hitPts = 1):
@@ -62,7 +62,7 @@ class MovingPiece(Piece):
             sq.sendmessage(msg)
 
     def movetosquare(self, newsq, currsq=None):
-        import mutants.Mutant
+        import Mutant
 
         if currsq == None:
             currsq = self.__lastsquare = self.getPosition()
@@ -77,7 +77,7 @@ class MovingPiece(Piece):
                 if (self.setPosition(newsq)):
                     currsq.removePiece()
                     self.decrRemaining(dist)
-                    if not isinstance(self, mutants.Mutant.Mutant):
+                    if not isinstance(self, Mutant.Mutant):
                         # + " moving " + self.fullname + " to (" + \
                         #             str(newsq.getXpos()) + ", " + str(newsq.getYpos()) + ")")
                         self.message(self.synopsis())
@@ -101,8 +101,10 @@ class MovingPiece(Piece):
         return (self.movetosquare(newsq, currsq))
 
     def damage(self, amount):
+        # print("Received " + str(amount) + " damage, have " + str(self.__hitPts))
         self.__hitPts -= amount
         if self.__hitPts <= 0:
+            # print("Now have " + str(self.__hitPts))
             self.deathmessage()
         return(self.__hitPts <= 0)
 
@@ -162,7 +164,7 @@ class MovingPiece(Piece):
     def pickup(self, tool):
         """
         move into a square and pick up what's there
-        :type tool: mutants.Equipment.Equipment
+        :type tool: Equipment.Equipment
         """
         if self.__carried != None and self.__lastsquare != None:
             self.__lastsquare.addequipment(self.__carried)
@@ -183,7 +185,7 @@ class MovingPiece(Piece):
             weapdescr = " with a " + self.carried.name
         else:
             weapdescr = ""
-        if dieroll + self.handtohand > mutants.Constants.Constants.TOHIT:
+        if dieroll + self.handtohand > const.Constants.TOHIT:
             self.message(self.fullname + " attacks " + sq.piece.fullname + weapdescr + " for " + \
                          str(self.handtohanddamage) + " damage.")
             self.setgotakill(sq.attackpiece(self.handtohanddamage))
@@ -201,7 +203,7 @@ class MovingPiece(Piece):
                     rangepenalty = - 1
                 # Determine if the attack hits
                 dieroll = random.randint(0, 5) + 1
-                if dieroll + self.ranged >= mutants.Constants.Constants.TOHIT:
+                if dieroll + self.ranged >= const.Constants.TOHIT:
                     # It's a hit!
                     damage = self.rangeddamage + rangepenalty
                     if self.carried != None:

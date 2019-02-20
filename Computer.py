@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.PlayerPiece
+import PlayerPiece as pp
 
-class Computer(mutants.PlayerPiece.PlayerPiece):
+class Computer(pp.PlayerPiece):
     """
     The Computer controls the robots' movements.  It is a non-moving piece,
     unlike a piece of equipment.

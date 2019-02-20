@@ -2,11 +2,11 @@ __author__ = 'Fitz'
 
 import random
 
-import mutants.Human
-import mutants.Robot
-import mutants.Constants
+import Human as hum
+import Robot as rob
+import Constants as const
 
-class Professor(mutants.Human.Human):
+class Professor(hum.Human):
     """
     The Professor - bright but not good in a fight.  Really, he's only good for his
     special ability:  Making robots out of spare parts.
@@ -30,14 +30,14 @@ class Professor(mutants.Human.Human):
 
         # He succeeds half the time.
         if random.randint(1, 6) >= 4:
-            robot = mutants.Robot.Robot(True)       # made from scrap => no gun
+            robot = rob.Robot(True)       # made from scrap => no gun
             placetoput = None
             # figure out where to put it
             if self.lastsquare != None and not self.lastsquare.isOccupied():
                 placetoput = self.lastsquare
             else:
                 # check around
-                for dirct in mutants.Constants.Constants.directions:
+                for dirct in const.Constants.directions:
                     nsq = self.square.getNeighbor(dirct)
                     if nsq != None and not nsq.isOccupied() and nsq.getTerrain().movethru():
                         placetoput = nsq

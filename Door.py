@@ -1,10 +1,10 @@
 __author__ = 'Fitz'
 
 import random
-import mutants.Terrain
-import mutants.MovingPiece
+import Terrain as tr
+import MovingPiece as mp
 
-class Door(mutants.Terrain.Terrain):
+class Door(tr.Terrain):
     """
     Represents a door.
     There will be some interesting interaction checking required for the
@@ -22,13 +22,13 @@ class Door(mutants.Terrain.Terrain):
         self.__smashed = False
 
     def movethru(self, piece=None):
-        import mutants.Mutant
+        import Mutant as m
 
         if (self.__smashed):            # not really a door any more
             return (True)
         if (piece == None):
             return (False)
-        if (isinstance(piece, mutants.Mutant.Mutant)):
+        if (isinstance(piece, m.Mutant)):
             retval = self.smash()
             piece.decrRemaining(2)
             if retval:
@@ -36,7 +36,7 @@ class Door(mutants.Terrain.Terrain):
             else:
                 piece.message(piece.fullname + " fails to smash the door open")
             return (retval)
-        elif (isinstance(piece, mutants.MovingPiece.MovingPiece)):
+        elif (isinstance(piece, mp.MovingPiece)):
             piece.decrRemaining(1)
             return (True)
         else:

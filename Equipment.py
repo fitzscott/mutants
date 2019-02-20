@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.Piece
+import Piece as pc
 
-class Equipment(mutants.Piece.Piece):
+class Equipment(pc.Piece):
     """
     Represents tools & equipment, including weapons - rifles, pistols, axes, pipes, etc. -
     as well as tools - first aid kits, repair kits (first aid for robots), slide rule (?),

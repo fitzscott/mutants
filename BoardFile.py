@@ -1,12 +1,12 @@
 __author__ = 'Fitz'
 
 import os
-import mutants.Board
-import mutants.Constants
-import mutants.FileChar
-import mutants.Space
-import mutants.Door
-import mutants.Wall
+import Board as b
+# import Constants
+import FileChar as fc
+# import Space
+# import Door
+# import Wall
 
 class BoardFile():
     """
@@ -14,7 +14,7 @@ class BoardFile():
     >>> bf = BoardFile()
     >>> bf.basefilename = "testboard1"
     >>> print(bf.fullfilename)
-    C:\\Users\\Fitz\\PycharmProjects\\Mutants\\mutants\\Resources\\Boards\\testboard1.txt
+    C:\\Users\\Fitzs\\PycharmProjects\\mutants\\Resources\\Boards\\testboard1.txt
     >>> bf.readFromFile()
     """
     def __init__(self):
@@ -60,29 +60,29 @@ class BoardFile():
         self.__file.close()
 
     def createBoard(self):
-        fc = mutants.FileChar.FileChar()
-        board = mutants.Board.Board()
+        fcx = fc.FileChar()
+        board = b.Board()
         board.height = self.__lines
         board.width = self.__columns
         for linenum in range(len(self.__boardlines)):
             for colnum in range(len(self.__boardlines[linenum]) - 1):  #  skip CRLF
                 sq = board.addSquare(colnum, linenum)
-                equip = fc.getEquipment(self.__boardlines[linenum][colnum])
-                piece = fc.getPiece(self.__boardlines[linenum][colnum])
+                equip = fcx.getEquipment(self.__boardlines[linenum][colnum])
+                piece = fcx.getPiece(self.__boardlines[linenum][colnum])
                 if (equip != None):
                     # equipment can only reside in clear terrain
-                    terr = fc.getTerrain(" ")
+                    terr = fcx.getTerrain(" ")
                     sq.addequipment(equip)
                 elif (piece != None):
                     # Mutant can only reside in clear terrain (for these purposes, at least).
                     # Computer is largely the same.
-                    terr = fc.getTerrain(" ")
+                    terr = fcx.getTerrain(" ")
                     if piece.name == "Computer":
                         sq.board.placerobot(piece, sq)      # treat the computer like a non-moving robot.
                     else:
                         sq.board.placemutant(piece, sq)
                 else:
-                    terr = fc.getTerrain(self.__boardlines[linenum][colnum])
+                    terr = fcx.getTerrain(self.__boardlines[linenum][colnum])
                 sq.setTerrain(terr)
         return(board)
 

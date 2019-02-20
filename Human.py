@@ -1,11 +1,11 @@
 __author__ = 'Fitz'
 
-import mutants.PlayerPiece
+import PlayerPiece as pp
 
-class Human(mutants.PlayerPiece.PlayerPiece):
+class Human(pp.PlayerPiece):
     """
     The human pieces on the board are the basis of the victory conditions.
-    >>> bart = Human("Bart")
+    >>> bart = Human("Buck")
     >>> molly = Human("Molly")
     >>> charlie = Human("Charlie")
     >>> if charlie.canmove(): print("Charlie can move.")

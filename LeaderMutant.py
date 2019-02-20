@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.Mutant
+import Mutant as m
 
-class LeaderMutant(mutants.Mutant.Mutant):
+class LeaderMutant(m.Mutant):
     """
     Boss mutant.  Not like a boss monster in other games -
     more like a boss in the workplace.

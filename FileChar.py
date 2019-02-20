@@ -1,12 +1,12 @@
 __author__ = 'Fitz'
 
-import mutants.Space
-import mutants.Wall
-import mutants.Door
-import mutants.ExteriorSpace
-import mutants.Equipment
-import mutants.Mutant
-import mutants.Computer
+import Space as spc
+import Wall as wl
+import Door as dor
+import ExteriorSpace as es
+import Equipment as eq
+import Mutant as mut
+import Computer as comp
 
 class FileChar():
     """
@@ -28,7 +28,7 @@ class FileChar():
     >>> eq1.name
     'Pistol'
     >>> eq2 = fc.getEquipment("!")
-    >>> eq2.handtohandadd
+    >>> eq2.handtohanddamagebonus
     3
     >>> eq3 = fc.getEquipment("Y")
     >>> if (eq3 == None): print("None, as expected")
@@ -37,10 +37,10 @@ class FileChar():
 
     def __init__(self):
         self.BoardCharLookup = {
-            "#": ("Wall", mutants.Wall.Wall),
-            "D": ("Door", mutants.Door.Door),
-            " ": ("Space", mutants.Space.Space),
-            "-": ("ExteriorSpace", mutants.ExteriorSpace.ExteriorSpace)
+            "#": ("Wall", wl.Wall),
+            "D": ("Door", dor.Door),
+            " ": ("Space", spc.Space),
+            "-": ("ExteriorSpace", es.ExteriorSpace)
         }
 
         # attributes: H2H hit bonus, H2H damage bonus, ranged bonus, ranged damage, range, healing
@@ -75,15 +75,15 @@ class FileChar():
         if (nm == None):
             equip = None
         else:
-            equip = mutants.Equipment.Equipment(nm, nm, hth_hit, hth_dam, rng_hit, rng_dam, rng, heal)
+            equip = eq.Equipment(nm, nm, hth_hit, hth_dam, rng_hit, rng_dam, rng, heal)
         return(equip)
 
     def getPiece(self, boardchar):
         p = None
         if boardchar == "M":
-            p = mutants.Mutant.Mutant()
+            p = mut.Mutant()
         elif boardchar == "C":
-            p = mutants.Computer.Computer()
+            p = comp.Computer()
         return (p)
 
 if __name__ == "__main__":

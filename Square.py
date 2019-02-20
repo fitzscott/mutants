@@ -1,16 +1,16 @@
 __author__ = 'Fitz'
-import mutants.Piece
-import mutants.Board
-import mutants.Constants
-import mutants.Terrain
-import mutants.Space
+import Piece as pc
+# import Board
+# import Constants
+# import Terrain
+import Space as sp
 
 class Square():
     """
     Represents a single square position on the board.
     Maybe contain a piece.
     >>> sq = Square(None)
-    >>> p = mutants.Piece.Piece("Georgina", None)
+    >>> p = pc.Piece("Georgina", None)
     >>> if sq.addPiece(p): print("Piece " + p.name + " added successfully.")
     Piece Georgina added successfully.
     >>> if not sq.addPiece(p): print("Piece " + p.name + " refused to be added.")
@@ -22,7 +22,7 @@ class Square():
         self.__board = board
         self.__xpos = xpos
         self.__ypos = ypos
-        self.__terrain = mutants.Space.Space()
+        self.__terrain = sp.Space()
         self.__equipment = None
         self.__indicator = None
 

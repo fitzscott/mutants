@@ -4,13 +4,13 @@ import random
 import math
 import os
 
-import mutants.Square
-import mutants.Constants
-import mutants.Mutant
-import mutants.RadioactiveMutant
-import mutants.LeaderMutant
-import mutants.Human
-import mutants.Robot
+import Square as sq
+import Constants as const
+import Mutant as m
+import RadioactiveMutant as rm
+import LeaderMutant as lm
+import Human as hum
+import Robot as rob
 
 class Board():
     """
@@ -61,9 +61,9 @@ class Board():
 
     # I think these need to be redefined as properties, but I'm not sure how yet.
     def addSquare(self, xpos, ypos):
-        sq = mutants.Square.Square(self, xpos, ypos)
-        self.__squares.append(sq)
-        return (sq)
+        sqr = sq.Square(self, xpos, ypos)
+        self.__squares.append(sqr)
+        return (sqr)
 
     def getSquareIndex(self, xpos, ypos):
         return(xpos + ypos * self.__width)
@@ -126,14 +126,14 @@ class Board():
         ycurincr = 0.0
         xdif = sq2.getXpos() - sq1.getXpos()
         if xdif > 0:
-            xdirct = mutants.Constants.Constants.RIGHT
+            xdirct = const.Constants.RIGHT
         else:
-            xdirct = mutants.Constants.Constants.LEFT
+            xdirct = const.Constants.LEFT
         ydif = sq2.getYpos() - sq1.getYpos()
         if ydif > 0:
-            ydirct = mutants.Constants.Constants.DOWN
+            ydirct = const.Constants.DOWN
         else:
-            ydirct = mutants.Constants.Constants.UP
+            ydirct = const.Constants.UP
         dist = abs(xdif) + abs(ydif)        # simple square-bound movement distance
         xincrdif = xdif / dist
         yincrdif = ydif / dist
@@ -176,7 +176,7 @@ class Board():
         self.__maxmessages = cnt
 
     def getmutants(self, wave, overridenum=0):
-        import mutants.FileChar
+        import FileChar as fc
 
         self.__hypcntdn = 4     # reset for each mutant gathering
 
@@ -195,30 +195,30 @@ class Board():
         if overridenum:
             nummutants = overridenum
         else:
-            nummutants = mutants.Constants.Constants.MUTANTSPERWAVE[wave - 1]
+            nummutants = const.Constants.MUTANTSPERWAVE[wave - 1]
 
-        fc = mutants.FileChar.FileChar()
+        fc1 = fc.FileChar()
         self.__mutants = []
         bats = pipes = shotguns = 0
         for i in range(nummutants):
             if i % 10 == 8 or i % 10 == 9:
-                mutie = mutants.RadioactiveMutant.RadioactiveMutant()
-                mutie.pickup(fc.getEquipment(";"))
+                mutie = rm.RadioactiveMutant()
+                mutie.pickup(fc1.getEquipment(";"))
             elif i % 10 == 3:
-                mutie = mutants.LeaderMutant.LeaderMutant()
-                mutie.pickup(fc.getEquipment("*"))
+                mutie = lm.LeaderMutant()
+                mutie.pickup(fc1.getEquipment("*"))
             else:
-                mutie = mutants.Mutant.Mutant()
+                mutie = m.Mutant()
             mutie.number = i
             # hand out goodies to the mutants
             if random.randint(1, 6) + random.randint(1, 6) >= 11:       # some shotgun hunters
-                mutie.pickup(fc.getEquipment("*"))
+                mutie.pickup(fc1.getEquipment("*"))
                 shotguns +=1
             elif random.randint(1, 6) + random.randint(1, 6) >= 10:       # some plumbers
-                mutie.pickup(fc.getEquipment("|"))
+                mutie.pickup(fc1.getEquipment("|"))
                 pipes += 1
             elif random.randint(1, 6) + random.randint(1, 6) >= 9:       # lots of baseball players, apparently
-                mutie.pickup(fc.getEquipment("!"))
+                mutie.pickup(fc1.getEquipment("!"))
                 bats += 1
             # Every bad mutant needs a name - they're (radioactive) people, too.
             mf = random.randint(1, 4)
@@ -233,7 +233,7 @@ class Board():
     def placemutants(self):
         stagingarea = self.emptyspace()
         numempties = len(stagingarea) - len(self.__mutants)
-        print("We have " + str(numempties) + " more spaces available than mutants.")
+        print("We have " + str(numempties) + " more spaces available than ")
         for i in range(numempties):
             stgsiz = len(stagingarea)
             idx = random.randint(0, stgsiz-1)
@@ -249,7 +249,7 @@ class Board():
     def placemutant(self, mutie, sq):
         if mutie not in self.__mutants:
             print("Appending fixed-position mutant")
-            self.__mutants.append(mutie)
+            self.__append(mutie)
         mutie.setPosition(sq)
 
     def placeplayerpiece(self, piece, pcgrp, sq=None):
@@ -327,7 +327,7 @@ class Board():
     def humanpiececount(self):
         cnt = 0
         for piece in self.__playerpieces:
-            if isinstance(piece, mutants.Human.Human):
+            if isinstance(piece, hum.Human):
                 cnt += 1
         return (cnt)
 
@@ -336,12 +336,12 @@ class Board():
 
     def cripplerobots(self):
         for piece in self.__playerpieces:
-            if isinstance(piece, mutants.Robot.Robot):
+            if isinstance(piece, rob.Robot):
                 piece.decrRemaining(piece.getRemainingMovement())
                 piece.movement = -1
 
     def hypermutants(self, wave):
-        import mutants.HyperRadioactiveMutant
+        import HyperRadioactiveMutant
 
         if wave == 3:
             glomin = 10
@@ -350,8 +350,8 @@ class Board():
 
         for mutidx in range(len(self.__mutants)):
             # Don't convert them more than once.
-            if not isinstance(self.__mutants[mutidx], mutants.HyperRadioactiveMutant.HyperRadioactiveMutant):
-                hypmutie = mutants.HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx], glomin)
+            if not isinstance(self.__mutants[mutidx], HyperRadioactiveMutant.HyperRadioactiveMutant):
+                hypmutie = HyperRadioactiveMutant.HyperRadioactiveMutant(self.__mutants[mutidx], glomin)
                 sq = self.__mutants[mutidx].square
                 sq.removePiece()
                 hypmutie.setPosition(sq)

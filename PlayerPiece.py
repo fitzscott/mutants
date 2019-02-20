@@ -1,9 +1,9 @@
 __author__ = 'Fitz'
 
-import mutants.MovingPiece
-import mutants.Constants
+import MovingPiece as mp
+import Constants as const
 
-class PlayerPiece(mutants.MovingPiece.MovingPiece):
+class PlayerPiece(mp.MovingPiece):
     """
     Represents humans and robots (or robotos, if we're playing in Styx Japan)
     >>> molly = PlayerPiece("Molly")
@@ -13,8 +13,8 @@ class PlayerPiece(mutants.MovingPiece.MovingPiece):
 
     def __init__(self, name):
         # first, get attributes for this piece from constants
-        if name in mutants.Constants.Constants.playerpieceattributes:
-            attr = mutants.Constants.Constants.playerpieceattributes[name]
+        if name in const.Constants.playerpieceattributes:
+            attr = const.Constants.playerpieceattributes[name]
             mov = attr[0]
             hp = attr[1]
             h2h = attr[2]
@@ -51,10 +51,10 @@ class PlayerPiece(mutants.MovingPiece.MovingPiece):
         return "None"
 
     def damage(self, amount):
-        import mutants.Indicator
+        import Indicator
 
         if super().damage(amount):
-            ind = mutants.Indicator.Indicator(self.indicatorstring, self.indicatorstring, self.fullname)
+            ind = Indicator.Indicator(self.indicatorstring, self.indicatorstring, self.fullname)
             self.square.indicator = ind
             return (True)
         else:

@@ -1,11 +1,11 @@
 __author__ = 'Fitz'
 
 import unittest
-import mutants.Display
+import Display
 
 class TestDisplay(unittest.TestCase):
     def setUp(self):
-        self.__display = mutants.Display.Display()
+        self.__display = Display.Display()
         #self.__display.loadResources("testboard1")
 
     #def testEventLoop(self):

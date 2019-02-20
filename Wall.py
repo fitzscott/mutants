@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.Terrain
+import Terrain as tr
 
-class Wall(mutants.Terrain.Terrain):
+class Wall(tr.Terrain):
     """
     Represents a wall.  No cats who can walk through walls in this game.
     >>> w = Wall()

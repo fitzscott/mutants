@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.Space
+import Space as spc
 
-class ExteriorSpace(mutants.Space.Space):
+class ExteriorSpace(spc.Space):
     """
     Exterior space - outside the building, where the mutants arrive.
     >>> sp = ExteriorSpace()

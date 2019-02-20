@@ -1,8 +1,8 @@
 __author__ = 'Fitz'
 
-import mutants.Terrain
+import Terrain as trr
 
-class Space(mutants.Terrain.Terrain):
+class Space(trr.Terrain):
     """
     Empty space terrain on the board - easy to move through
     >>> sp = Space()
